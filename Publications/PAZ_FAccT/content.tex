@@ -1,8 +1,8 @@
 \section{Introduction}\label{sec:introduction}
 
 % XAI is all the craze!
-Explaining one's behavior to another is a critical element in human social interaction. 
-A person depends on explanations to improve their understanding, ultimately building a stable mental model as basis for prediction and control~\citep{heider_psychology_1958}. 
+Explaining one's behavior to another person is a critical element in human social interaction. 
+We depend on explanations to improve our understanding, ultimately building a stable mental model as basis for prediction and control~\citep{heider_psychology_1958}. 
 The need to effectively explain not just human action, but also the behavior of automated systems and their underlying \gls{ML} models, has received increasing attention in recent years. This development gave rise to the increasing interest in \gls{XAI} as a research field. 
 % Supposed interpretable models are there, exp CFs, but user exaluations are often neglected.
 Consequently, the \gls{XAI} community has seen a veritable surge of technical accounts on how to realize explainability for \gls{ML}~\citep{guidotti_survey_2019}. 
@@ -78,11 +78,13 @@ Following the user-centered focus on explainability proposed by~\citeauthor{mill
 \end{equation}
 where $\x\in\RN^\dimsym$ denotes the original input, the regularization $\regularization(\cdot)$ penalizes deviations from the original input $\x$ (weighted by a regularization strength $C>0$), $\ycf\in\setY$ denotes the requested output/behavior of the model $\classifier(\cdot)$ under the counterfactual $\xcf$, and $\loss(\cdot)$ denotes a loss function penalizing deviations from the requested prediction.
 
-Thus, computing \glspl{CFE} translates to finding minimal perturbations to a model's input that alter the final prediction to a desired outcome. Given the regularization term $\regularization(\cdot)$, generated \glspl{CFE} based on this definition remain as close to the original input $\x$ as possible. Consequently, we will refer to them as \textit{closest \glspl{CFE}} for the remainder of this work.
-As one of the first approaches to model \glspl{CFE} for classical \gls{ML},~\refeq{eq:counterfactual_opt_original} is the 
-forerunner of more powerful, model specific variations, as well as many methods for solving these optimization problems~\citep{verma_counterfactual_2020,artelt_computation_2019,karimi_survey_2020}.
+Thus, computing \glspl{CFE} translates to finding minimal perturbations to a model's input that alter the final prediction to a desired outcome. Given the regularization term $\regularization(\cdot)$, generated \glspl{CFE} based on this definition remain as close to the original input $\x$ as possible. 
+Thus, we will refer to them as \textit{closest \glspl{CFE}} for the remainder of this work.
+% (henceforth \textit{closest \glspl{CFE}}).
+%Consequently, we will refer to them as \textit{closest \glspl{CFE}} for the remainder of this work.
+As one of the first approaches to model \glspl{CFE} for classical \gls{ML},~\refeq{eq:counterfactual_opt_original} is the forerunner of more powerful, model specific variations, as well as many methods for solving these optimization problems~\citep{verma_counterfactual_2020,artelt_computation_2019,karimi_survey_2020}.
 However, it is important to note that \textit{closest \glspl{CFE}} do not necessarily yield plausible or even realistic counterfactuals.
-As a matter of fact, \textit{closest \glspl{CFE}} may look like adversarials, introducing only slight changes in the input that go unnoticed by a human observer despite altering the model's output~\citep{papernot_practical_2017}. 
+As a matter of fact, \textit{closest \glspl{CFE}} may look like adversarials, introducing slight changes in the input that go unnoticed by a human observer despite altering the model's output~\citep{papernot_practical_2017}. 
 Whether a computed \textit{closest \glspl{CFE}} corresponds to such an adversarial depends on the model, loss function and regularization, diminishing their suitability as explanation technique~\citep{laugel_issues_2019}.
 Expanding the original definition in \refeq{eq:counterfactual_opt_original} by an additional plausibility constraint circumvents these issues:
 \begin{equation}
@@ -92,10 +94,8 @@ Expanding the original definition in \refeq{eq:counterfactual_opt_original} by a
 \end{equation}
 where $\set{P}$ denotes the set of all plausible \glspl{CFE}.
 
-To distinguish these explanations from their psychologically plausible counterparts discussed in the previous section, we will henceforth refer to these solutions as \textit{computationally plausible \glspl{CFE}}.
-Similar to the modeling of \textit{closest \glspl{CFE}} in~\refeq{eq:counterfactual_opt_original}, different realizations of \textit{computational plausibility} have been proposed~\citep{looveren_interpretable_2019,poyiadzi_face_2019,artelt_convex_2020}. 
-One particular instance are density based approaches~\citep{artelt_convex_2020} that restrict a counterfactual $\xcf$ to regions of high density. 
-The respective density function may for instance be estimated from the training data.
+%To distinguish these explanations from their psychologically plausible counterparts discussed in the previous section, we will henceforth refer to these solutions as \textit{computationally plausible \glspl{CFE}}.
+Similar to the modeling of \textit{closest \glspl{CFE}} in~\refeq{eq:counterfactual_opt_original}, different realizations of these \textit{computationally plausible \glspl{CFE}} have been proposed~\citep{looveren_interpretable_2019,poyiadzi_face_2019,artelt_convex_2020}. One particular instance are density based approaches~\citep{artelt_convex_2020} that restrict a counterfactual $\xcf$ to regions of high density (\eg, estimated from the training data).
 In the current work, we follow an alternative approach when providing \textit{computationally plausible \glspl{CFE}} and limit the set of possible counterfactuals to the training data as a representative set of feasible examples~\citep{poyiadzi_face_2019}.
 
 %In the computer science world, generating a CFs translates into showing what input pertubations alter a model's prediction. Additionally, some authors use the constraint that these pertubations need ot be minimal (REF REF REF).
@@ -155,7 +155,7 @@ To assess \textit{Hypotheses 1--3}, we use a novel iterative learning design rev
 
 \subsection{The Alien Zoo Scenario}
 
-We developed a game-like experimental design, the Alien Zoo framework~\citep{IAZ ARXIV}.
+We developed a game-like experimental design, the Alien Zoo~\citep{IAZ ARXIV}.
 It relies on a web-based interface to provide global access for users from diverse backgrounds, facilitating large-scale participant recruitment.
 For a detailed account of the framework's conception and the rationale behind the corresponding design choices, see~\citet{IAZ ARXIV}.
 
@@ -203,7 +203,8 @@ Second, we measure time needed to reach a feeding decision over trials (hencefor
 
 We acquire self-reports via the post-game survey, assessing different aspects of participant's system understanding. 
 The first two survey items ask users to identify plants they think are relevant and irrelevant for task success. 
-Replies from these items allow us to measure to which extent users in different groups formed explicit knowledge of the underlying data structure. Further, users indicate in how far they find the explanations useful, to which degree they can make use of them, and in how far they imagine the presented \glspl{CFE} to be helpful for other users, too. These items assess user's subjective understanding.
+Replies from these items allow us to measure to which extent users in different groups formed explicit knowledge of the underlying data structure. 
+Further, users indicate in how far they find the explanations useful, to which degree they can make use of them, and in how far they imagine the presented \glspl{CFE} to be helpful for other users, too. These items assess user's subjective understanding.
 
 Finally, three self-report measures check for potential confounds. 
 These are items that ask users to indicate their understanding of the explanations as such, whether they feel the need for support for understanding, and their evaluation of timing and efficacy of \gls{CFE} presentation.
@@ -218,7 +219,7 @@ Yet, it is powerful enough to model our synthetic data set sufficiently well.
 The current implementation uses the Gini splitting rule of CART~\citep{breiman_classification_1984}, with a maximum tree depth of $4$.
 The decision tree corresponding to the ground truth model is build once in the beginning and remains the same for all users during the study. 
 
-We use the code provided by the CEML package~\citep{artelt_ceml_2019} for computing \glspl{CFE}\footnote{\url{https://github.com/andreArtelt/ceml}}.
+We use the code provided by the CEML package~\citep{artelt_ceml_2019} for computing \glspl{CFE}.\footnote{\url{https://github.com/andreArtelt/ceml}}
 In the interest of reproducible research, all source code of the current study is available.\footnote{\url{LINK}} 
 % taken out to ensure anonymity
 The underlying data set used for tree building consists of 5 integer features (\ie, the plants used for feeding) and 1 continuous output variable (\ie, the growth rate used as factor for computing the new pack size).
@@ -231,8 +232,8 @@ Note that our implementation prevents pack size from shrinking below 2.
 \subsection{Participants}
 
 The study ran in early November 2021 on \gls{AMT}.
-After performing three pilots with 10 users each to refine the experimental design, we recruited a total of 100 participants for final assessment. % Batch info neccesary? % report that users were excluded if the done it before?
-A first data quality check revealed corrupted data for four participants due to logging issues. 
+After performing three pilots with 10 users each to refine the experimental design, we recruited a total of 100 participants for final assessment, following an a priori sample size estimation~\citep{kumle_estimating_2021}.% Batch info neccesary? % report that users were excluded if the done it before?
+~A first data quality check revealed corrupted data for four participants due to logging issues. 
 Thus, we acquired four additional data sets. 
 All participants gave informed electronic consent by providing clickwrap agreement prior to participation.
 All participants received a reward of US\$ 4 for participation. 
@@ -299,14 +300,14 @@ On average, participants needed 13m:43s ($\pm$ 00m:23s SEM) from accepting the H
 \subsection{Statistical Analysis, Sample Size Calculation and Data Quality Measures}
 
 We perform all statistical analyses using R-4.1.1~\citep{r_core_team_r_2021}, using \gls{CFE} variant (\textit{closest} or \textit{computationally plausible}) as independent variable.
-Changes in performance over 12 trials as a measure of learning rate per group (lme4 v.4\textunderscore 1.1-27.1)~\citep{bates_fitting_2015}.
+Changes in performance over 12 trials measure learning rate per group (lme4 v.4\textunderscore 1.1-27.1)~\citep{bates_fitting_2015}.
 In the model testing for differences in terms of user performance, the dependent variable is number of aliens generated. 
-In the assessment of user's reaction time, we use decision time in each trial as dependent variable.
-The final models include the fixed effects of group, trial number and their interaction. The random-effect structure includes a by-subjects random intercept. 
-Advantages of using this approach include that these models account for correlations of data drawn from the same participant and missing data~\citep{detry_analyzing_2016,muth_alternative_2016}.
+In the assessment of user's reaction time, we use trialwise decision time as dependent variable.
+The final models include fixed effects of group, trial number and their interaction. The random-effect structure includes a by-subjects random intercept. 
+Such linear mixed effects models account for correlations of data drawn from the same participant and missing data~\citep{detry_analyzing_2016,muth_alternative_2016}.
 The analysis of variance function of the stats package in base R serves to compare model fits.
 $\eta_{\text{p}}^{2}$ values denote effect sizes (effectsize v.0.5)~\citep{ben-shachar_effectsize_2020}.
-Computation of pairwise estimated marginal means follow up significant main effects or interactions, with respective effect sizes reported in terms of Cohen's \textit{d}.
+Computations of pairwise estimated marginal means follow up significant main effects or interactions, with respective effect sizes reported in terms of Cohen's \textit{d}.
 All post-hoc analyses reported are Bonferroni corrected to account for multiple comparisons.
 
 We evaluate data gathered from the post-game survey depending on question type.
@@ -316,10 +317,10 @@ We also compare user's explicit knowledge of plant relevance to the expected val
 To analyze group differences of ordinal data from the Likert-style items, we rely on the non-parametric Wilcoxon-Mann-Whitney \textit{U} test.
 We report effect sizes for all survey data comparisons as \textit{r}.
 
-We performed an a priori sample size estimation based on data obtained from the third pilot. 
-To do so, we set up two linear mixed effects models with pack size and reaction time as described above. 
-For each of these models, we run a simulation-based power analysis for samples of 20--100 participants with fixed effects of group and trial number over 1000 simulations (mixedpower v.0.1.0)~\citep{kumle_estimating_2021}. 
-Inspecting the results, we choose to acquire data from 100 participants to reach a power $>$ 80\% for at least one combination of trial number and group, while also accounting for potential participant attrition.
+%We performed an a priori sample size estimation based on data obtained from the third pilot. 
+%To do so, we set up two linear mixed effects models with pack size and reaction time as described above. 
+%For each of these models, we run a simulation-based power analysis for samples of 20--100 participants with fixed effects of group and trial number over 1000 simulations (mixedpower v.0.1.0)~\citep{kumle_estimating_2021}. 
+%Inspecting the results, we choose to acquire data from 100 participants to reach a power $>$ 80\% for at least one combination of trial number and group, while also accounting for potential participant attrition.
 
 As a web-based study, we run the risk that some participants attempt to game the system to collect the reward without providing proper answers. 
 Thus, we implement a number of data quality checks that were planned a priori.
@@ -369,8 +370,7 @@ Neither the main effect of factor \textit{group} (\textit{F}(11,72) = 0.235, \te
 In terms of mean number of matches between user judgments of plant relevance for task success and the ground truth, users in both groups performed comparably both for relevant 
 (\textit{closest}: mean number of matches = 2.850 $\pm$ 0.198 \textit{SE}; \textit{plausible}: mean number of matches = 3.206 $\pm$ 0.178 \textit{SE}; \textit{U} = 781, \textit{p} = .255, \textit{r} = .054)
 and irrelevant plants (closest: mean number of matches = 3.125 $\pm$ 0.157 \textit{SE}), plausible: mean number of matches = 3.177 $\pm$ 0.217 \textit{SE}; \textit{U} = 721.5, \textit{p} = .643, \textit{r} = .054).
-
-While groups did not differ in terms of matches between user judgments of plant relevance, we find significant differences between mean group responses compared to the expected value given random responses (\ie, expected mean number of matches = 2.500): 
+While groups do not differ in terms of matches between user judgments of plant relevance, we find significant differences between mean group responses compared to the expected value given random responses (\ie, expected mean number of matches = 2.500): 
 Users in the \textit{computationally plausible} group have significantly more matches than random for both items (relevant plants: \textit{W} = 481, \textit{p} = .005, \textit{r} = .550; irrelevant plants: \textit{W} = 459.5, \textit{p} = .020, \textit{r} = .483).
 Users in the \textit{closest} group have significantly more matches than random when identifying irrelevant (\textit{W} = 659.5, \textit{p} = .002, \textit{r} = .544), but not relevant (\textit{W} = 536.5, \textit{p} = .331, \textit{r} = .274) plants.
 
@@ -379,7 +379,7 @@ Thus, we cannot verify our hypothesis that \textit{computationally plausible \gl
 \begin{figure}
    \centering
    \includegraphics[width=\textwidth]{./media/H1_p_ShubsPerTrial_RTPertrial_PAZ_FINAL.pdf}
-   \caption{Development of (\textbf{a}) mean pack size per group by trial, (\textbf{b}) mean decision time per group by trial, and (\textbf{c}) mean number of matches between user judgments and ground truth for survey items assessing relevant plants and irrelevant plants, respectively. Shaded areas in (\textbf{a}) and (\textbf{b}), and error bars in (\textbf{c}) denote the standard error of the mean. Asterisks denote statistical significance (\textit{p} < .05 (*), \textit{p} < .01 (**), and \textit{p} < .001 (***), respectively. Asterisks in (\textbf{c}) denote statistical significance from expected value for random behavior.}
+   \caption{Development of (\textbf{a}) mean pack size per group by trial, (\textbf{b}) mean decision time per group by trial, and (\textbf{c}) mean number of matches between user judgments and ground truth for survey items assessing relevant plants and irrelevant plants, respectively. Shaded areas in (\textbf{a}), (\textbf{b}), and error bars in (\textbf{c}) denote the standard error of the mean. Asterisks denote statistical significance (\textit{p} < .05 (*), \textit{p} < .01 (**), and \textit{p} < .001 (***), respectively. Asterisks in (\textbf{c}) denote statistical significance from expected value for random behavior.}
    \label{fig:hyp1}
  \end{figure}
 
@@ -404,7 +404,7 @@ In terms of needing support for understanding, both groups reply with a similar 
 Similarly, user judgments on timing and efficacy of  CFE presentation are consistently high across groups (\textit{closest} condition: \textit{M} = 4.100$\pm$0.175 \textit{SE}; \textit{plausible} condition: \textit{M} = 4.147$\pm$0.170 \textit{SE}; \textit{U} = 680.5, \textit{p} = 1 \textit{r} = .000).
 
 \subsection{Exploratory Analysis}
-Our explanatory analysis revealed that more than half of all users in both groups do not report to having detected any inconsistencies in the \glspl{CFE} provided (\textit{closest} condition: \textit{M} = 2.675 $\pm$ 0.166 \textit{SE}; \textit{plausible} condition: \textit{M} = 2.853 $\pm$ 0.207 \textit{SE}; \textit{U} = 743, \textit{p} = .480, \textit{r} = .082).
+More than half of all users in both groups do not report to having detected any inconsistencies in the \glspl{CFE} provided (\textit{closest} condition: \textit{M} = 2.675 $\pm$ 0.166 \textit{SE}; \textit{plausible} condition: \textit{M} = 2.853 $\pm$ 0.207 \textit{SE}; \textit{U} = 743, \textit{p} = .480, \textit{r} = .082).
 
 \section{Discussion}\label{sec:discussion}
 
@@ -428,9 +428,11 @@ Empirical evidence highlighting the close relation between perceived plausibilit
 In contrast, the computational plausibility constraint rejects \glspl{CFE} that are not part of the training set, even if they are minimal.
 Consequently, users in the \textit{plausible} condition encounter larger differences between provided explanations and their input, at odds with the idea of plausibility as comparative similarity.
 Conversely, users in the closest condition might have experienced their \glspl{CFE} as more psychologically plausible than the computationally plausible version.
-Further, an emotional effect is conceivable: Upon seeing \textit{closest \glspl{CFE}}, users might get a feeling of ``just missing the better option'', inducing negative affect that strongly motivates the need for improvement~\citep{medvec_when_1997, markman_reflection_2003}.
-Additionally, we may speculate that the larger discrepancies between factual and counterfactual state in the \textit{plausible} condition may increase the mental load on users, hampering learning.
-Future studies need to disentangle contributions of these potential factors.
+%Further, an emotional effect is conceivable: Upon seeing \textit{closest \glspl{CFE}}, users might get a feeling of ``just missing the better option'', inducing negative affect that strongly motivates the need for improvement~\citep{medvec_when_1997, markman_reflection_2003}.
+%Additionally, we may speculate that the larger discrepancies between factual and counterfactual state in the \textit{plausible} condition may increase the mental load on users, hampering learning.
+Further, upon seeing \textit{closest \glspl{CFE}}, users might get a feeling of ``just missing'', inducing negative affect that strongly motivates improvement~\citep{medvec_when_1997, markman_reflection_2003}.
+Additionally, the larger discrepancies between factual and counterfactual state in the \textit{plausible} condition might increase the mental load on users, potentially hampering learning.
+Future studies need to disentangle contributions of these factors.
 
 % Refer to Lim, 2009 - they did not find any effects for What-if explanations, 
 Intriguingly, our results are at odds with empirical findings indicating that \glspl{CFE} for intelligent systems do not improve user's task performance~\citep{lim_why_2009, van_der_waa_evaluating_2021}.
@@ -447,7 +449,7 @@ Thus, including goal-directed and interactive settings may potentially be vital 
 We suggest that future research designs need to pay special attention to these aspects in order to accurately evaluate \gls{XAI} approaches.
 
 % We did not find timing differences
-Beyond task performance, we quantify learning success in terms of user's decision time and their ability to explicitly state which plants were crucial for their pack to prosper. % (survey items 1 and 2).
+Beyond task performance, we quantify learning success in terms of user's decision time and their ability to explicitly state which plants were relevant. % (survey items 1 and 2).
 Both measures do not reveal significant group differences.
 In terms of user's decision time, both groups show significant speed-up already after Trial 1 (Figure \ref{fig:hyp1}a).
 This initial time decrease likely reflects how participants learn to work with the game interface efficiently.
@@ -490,9 +492,9 @@ The current results may only be generalized to cases with the same motivation fo
 Other motives and applications addressing more specific target groups call for independent studies.
 
 %% sample size: we pre-computed it, but had to throw out a portion - does it still hold up?
-From the originally recruited 100 participants, we excluded data from 26 individuals that did not meet our a priori data quality criteria.
+We excluded data from 26 out of 100 participants to meet a priori quality criteria.
 Such participant attrition common, especially in web-based studies. 
-As smaller sample sizes always mean a loss of statistical power, we factored in this issue early on, based on our a priori power analysis. 
+As smaller sample sizes always mean a loss of statistical power, we factored in this issue in an a priori power analysis. 
 Yet, the effect size of the significant interaction between factors \textit{trial number} and \textit{group} remains relatively small. 
 Hence, the results from this work await confirmation in larger follow-up studies.
  
@@ -514,7 +516,7 @@ Thus, our example is much more artificial, and we suggest applying iterative lea
 
 %% What did ppl do that did not show high levels of learning?
 Users in our study play an elaborate online game, with a detailed user interface, and several consecutive scenes.
-Designed to be maximally engaging as to ensure participant compliance, it may be the case that the amount of information displayed may overwhelm some participants.
+Designed to be maximally engaging as to ensure participant compliance, the amount of information displayed may overwhelm some participants.
 This could explain inferior performance of a small proportion of participants, like those who disagree with the notion that feedback presentation was timely and efficiently.
 
 % FUTURE WORK
@@ -545,7 +547,7 @@ We focus on potential group effects driven by receiving either \textit{closest \
 We develop an accessible game-like experimental design revolving around an abstract scenario, suitable for novice users.
 Our design demonstrates learning in both groups, highlighting the power of interactive and goal-directed tasks for user evaluations of \gls{CFE} methods, a yet vastly understudied aspect in the field of \gls{XAI}.
 Moreover, our findings suggest that novice users benefit more from receiving \textit{closest} than \textit{computationally plausible \glspl{CFE}}.
-This supports the view of plausibility as comparative similarity rather than probability, potentially more beneficial for users if they lack an accurate mental model to build on.
+This supports the view of plausibility as comparative similarity rather than probability in cases where users lack an accurate mental model to build on.
 In sum, our work emphasizes yet again that theoretical approaches proposing explanation techniques for \gls{ML} models and user-based validations thereof need to go hand in hand.
 Researchers designing \gls{XAI} approaches need to bear in mind human behavior, preferences and mental models, to build on a solid foundation to effectively benefit the end user.
 
