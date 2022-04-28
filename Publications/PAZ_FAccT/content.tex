@@ -38,9 +38,9 @@ Empirical evidence demonstrates that humans show this \textit{what-if} mentality
 In their functional theory of counterfactual thinking,~\citeauthor{roese_functional_2017} suggest a crucial role of counterfactual thoughts to guide to formation of future intentions, thus regulating subsequent behavior~\citep{roese_functional_2017,epstude_functional_2008}.
 This evidence is the root for the common supposition in \gls{XAI} that explanations formulated as counterfactuals are naturally intuitive, easy to understand, and helpful for users, often discounting the need for user evaluations~\citep{stepin_paving_2019, dandl_multi-objective_2020, guidotti_local_2018, artelt_efficient_2022}.
 
-%\subsection{Humans generate plausible CFEs}\label{subsubsec:psychoCFs_plausible}
+% how do humans generate CFEs? 
 Decades of philosophical and psychological research has concerned itself with the question of how humans generate counterfactuals. 
-% how do humans generate CFEs? --> possible worlds account by Lewis
+% --> possible worlds account by Lewis
 Lewis' seminal work on the topic builds on a theory of possible worlds, postulating that counterfactual statements trigger a comparison between the actual circumstances and a conceivable world in which the counterfactual statement occurred~\citep{lewis_counterfactuals_1973}.
 % how do humans generate CFEs? --> mental models view, Byrne
 Embedding this view into a cognitive framework of counterfactual thought, the mental models theory emphasizes the human ability to entertain two parallel representations of reality: The factual conditional, corresponding to the true state of the world, and the concurrent non-factual possibility, temporarily assumed to be true~\citep{byrne_mental_2002,byrne_precis_2007,johnson-laird_conditionals_2002,walsh_mental_2005}.
@@ -57,11 +57,11 @@ Further, authors like to note that humans produce plausible rather than implausi
 However, despite being a commonly-used notion in psychology, plausibility is difficult to define precisely.
 Variable interpretations of what constitutes a plausible counterfactual exist, referring to different partially overlapping concepts.
 \citeauthor{kahneman_simulation_1982} refer to hypothetical events as plausible if they are easy to imagine~\citep{kahneman_simulation_1982}. 
-%%%%%%% plausibility as closeness / similarity / comparative similarity:
+% plausibility as closeness / similarity / comparative similarity:
 \citeauthor{lewis_counterfactuals_1973} supposes that plausible counterfactuals come from worlds that are minimally different from reality~\citep{lewis_counterfactuals_1973}. 
 Building up on this idea of comparative similarity, empirical research shows perceived plausibility of a counterfactual event to be proportional to the perceived similarity between said counterfactual and the factual state~\citep{stanley_counterfactual_2017, de_brigard_perceived_2021}.
 
-%%%%%%% plausibility as probability:
+% plausibility as probability:
 In addition to such a similarity-based definition, plausibility is often used synonymously with concepts of likeliness or probability~\citep{pezdek_is_2006, de_brigard_remembering_2013}. 
 \citeauthor{de_brigard_remembering_2013} demonstrate that manipulations of counterfactual plausibility in terms of their likeliness changes their neural representation~\citep{de_brigard_remembering_2013}.
 Their findings may indicate greater affective evaluation for counterfactuals that carry greater subjective likelihood, and thus, plausibility.
@@ -80,8 +80,7 @@ where $\x\in\RN^\dimsym$ denotes the original input, the regularization $\regula
 
 Thus, computing \glspl{CFE} translates to finding minimal perturbations to a model's input that alter the final prediction to a desired outcome. Given the regularization term $\regularization(\cdot)$, generated \glspl{CFE} based on this definition remain as close to the original input $\x$ as possible. 
 Thus, we will refer to them as \textit{closest \glspl{CFE}} for the remainder of this work.
-% (henceforth \textit{closest \glspl{CFE}}).
-%Consequently, we will refer to them as \textit{closest \glspl{CFE}} for the remainder of this work.
+
 As one of the first approaches to model \glspl{CFE} for classical \gls{ML},~\refeq{eq:counterfactual_opt_original} is the forerunner of more powerful, model specific variations, as well as many methods for solving these optimization problems~\citep{verma_counterfactual_2020,artelt_computation_2019,karimi_survey_2020}.
 However, it is important to note that \textit{closest \glspl{CFE}} do not necessarily yield plausible or even realistic counterfactuals.
 As a matter of fact, \textit{closest \glspl{CFE}} may look like adversarials, introducing slight changes in the input that go unnoticed by a human observer despite altering the model's output~\citep{papernot_practical_2017}. 
@@ -94,22 +93,10 @@ Expanding the original definition in \refeq{eq:counterfactual_opt_original} by a
 \end{equation}
 where $\set{P}$ denotes the set of all plausible \glspl{CFE}.
 
-%To distinguish these explanations from their psychologically plausible counterparts discussed in the previous section, we will henceforth refer to these solutions as \textit{computationally plausible \glspl{CFE}}.
 Similar to the modeling of \textit{closest \glspl{CFE}} in~\refeq{eq:counterfactual_opt_original}, different realizations of these \textit{computationally plausible \glspl{CFE}} have been proposed~\citep{looveren_interpretable_2019,poyiadzi_face_2019,artelt_convex_2020}. One particular instance are density based approaches~\citep{artelt_convex_2020} that restrict a counterfactual $\xcf$ to regions of high density (\eg, estimated from the training data).
 In the current work, we follow an alternative approach when providing \textit{computationally plausible \glspl{CFE}} and limit the set of possible counterfactuals to the training data as a representative set of feasible examples~\citep{poyiadzi_face_2019}.
 
-%In the computer science world, generating a CFs translates into showing what input pertubations alter a model's prediction. Additionally, some authors use the constraint that these pertubations need ot be minimal (REF REF REF).
-%Changes need to be actionable to make a good explanation (REF), i.e. to also foster trust in the system (REF).
-%Counterfactuals are a good means to provide these explanations, as they do not require models themselves to be interpretable, and do not disclose details about an rithms's internal logic, or other data samples in the training set~\citep{Wachter2017}.
-%Given the surge of CF methods lately, there are a lot of ways CFs are computed (REFs REFs REFs)...
-%Importantly: there is some variation in terms of how CFs are defined: Sahil Verma, John Dickerson, and Keegan Hines. 2020. Counterfactual Explanations for Machine Learning: A Review. (2020).
-%In the current paper, we rely on the work of Artelt et al, and they do it like this...
-
 \section{Do Novice Users Profit from Computational Plausibility in an Abstract Domain?}\label{sec:hypotheses}
-
-% Here: Make a connection why it would be sensible to assume so.
-% Plausibility is an important feauture for human-generated CFEs, so why not also for machine learning ones?
-% TO DO: bring in the advantages of an iterative learning design
 
 The guiding question of the current work is whether \textit{computationally plausible \glspl{CFE}} have an advantage over \textit{closest \glspl{CFE}} in helping users to learn from an \gls{ML} model.
 To assess this question, we rely on an interactive iterative learning task, where users repeatedly choose input values for an \gls{ML} model.
@@ -127,7 +114,6 @@ Thus, we formulated the following three hypotheses.
 %\paragraph{Hypothesis 1} 
 \textit{Hypothesis 1.} We expect \textit{computationally plausible \glspl{CFE}} to be more helpful to users tasked to discover unknown relationships in data than \textit{closest} ones, both objectively and subjectively. 
 Specifically, we anticipate that participants in the plausible condition a) show greater learning success, b) become more automatic and thus quicker in the task, and c) are able to explicitly identify relevant and irrelevant input features.
-%Specifically, we expect participants in the plausible condition a) to produce larger packs over time, b) to become more automatic and thus quicker in choosing their plants, and c) to clearly state which plants were crucial for their pack to prosper. % (survey items 1 and 2).
 
 %\paragraph{Hypothesis 2}
 \textit{Hypothesis 2.} We expect a group difference in terms of subjective understanding.
@@ -137,10 +123,8 @@ Furthermore, we posit that users imagine \textit{computationally plausible \glsp
 %\paragraph{Hypothesis 3} 
 \textit{Hypothesis 3.} We evaluate users' understanding of the explanations themselves, their need for support to understand, and their evaluation of timing and efficacy of \gls{CFE} presentation. As structure and presentation mode of \glspl{CFE} is kept constant across conditions, we expect not to find any differences.
 This analysis tests the comparability of conditions, a key feature in any experimental user design.
-%Thus, we do not expect users in different conditions to differ in their understanding of the explanations as such, their need for support to understand, and their evaluation of timing and efficacy of \gls{CFE} presentation .
-% (questionnaire items 3, 4 + 10). So this is also control to make sure groups don’t differ in a weird way.
 
-Finally, we do not formulate a prediction whether groups will differ in uncovering inconsistencies in the explanations presented. This will be investigated in an additional exploratory analysis.% (maybe that happens in case of “closest” CFEs when we’re in the areas of “no training data“?) (questionnaire item 8). 
+Finally, we do not formulate a prediction whether groups will differ in uncovering inconsistencies in the explanations presented. This will be investigated in an additional exploratory analysis.
 
 \section{Experimental Design}\label{sec:experimental-design}
 
@@ -159,9 +143,6 @@ We developed a game-like experimental design, the Alien Zoo~\citep{IAZ ARXIV}.
 It relies on a web-based interface to provide global access for users from diverse backgrounds, facilitating large-scale participant recruitment.
 For a detailed account of the framework's conception and the rationale behind the corresponding design choices, see~\citet{IAZ ARXIV}.
 
-%\textcolor{ACMDarkBlue}{
-%In the current study, be relied on the novel Alien Zoo paradigm (REF to arxiv paper).
-%} \textcolor{ACMDarkBlue}{
 In the Alien Zoo scenario, participants imagine themselves as zookeepers for aliens. 
 To feed to the aliens, participants may choose from different plants. 
 However, it is not clear what plants make up a nutritious diet. 
@@ -170,19 +151,8 @@ Participants go through several feeding cycles, choosing a combination of plants
 After each cycle, the pack of aliens either decreases (given a bad combination of plants) or increases (given a good combination). 
 In regular intervals, participants receive a summary of their past choices, together with feedback on what choice would have led to a better result (\ie a \gls{CFE}).
 
-%\textcolor{ACMDarkBlue}{
-%Advantages of this approach is control for individual domain knowledge by relying on an abstract domain, evaluating the objective as well as subjective usability of automatically generated explanations directly (REF to arxiv paper).
-%} 
-
 Assessing performance of real users in an abstract task setting, this use case corresponds to a human grounded evaluation~\citep{doshi-velez_towards_2017}.
 Further, our setting falls under the ``explaining to discover'' category for explainability defined by~\citeauthor{adadi_peeking_2018}, investigating whether providing \glspl{CFE} to novice users improves their understanding of relationships in a yet unknown dataset~\citep{adadi_peeking_2018}.
-
-%} \textcolor{ACMDarkBlue}{
-%Unlike most real-life applications, systems investigated in user studies typically focus on applications for expert users trying to gain expert knowledge of a domain. 
-%In contrast, we 
-%Thus, 
-%Specifically, we focus on the question whether \glspl{CFE} computed according to computational plausibility prove to be more useful for novice users in this setting than providing closest \glspl{CFE}, independent of domain.
-%}
 
 \subsection{Post-Game Survey}
 
@@ -241,7 +211,6 @@ All participants received a reward of US\$ 4 for participation.
 The ten best performing users received an additional bonus of US\$ 2. 
 Game instructions informed participants about the possibility of a bonus to motivate compliance with the experimental task~\citep{bansal_updates_2019}.
 The study was approved by the Ethics Committee of the University Bielefeld, Germany.
-%The study was approved by the Ethics Committee of the author's home university.
 
 \subsection{Experimental Procedure}\label{subsec:experimental-procedure}
 
@@ -257,8 +226,6 @@ Written instructions detail that it is possible to choose up to six leaves per p
 Further instructions emphasize the user's task to maximize the number of aliens, so-called shubs, with the best players qualifying for a monetary bonus.
 Participants are also informed that they will receive feedback on what choice would have led to a better result after two rounds of feeding.
 Users begin the game by clicking a ``Start'' button, appearing with a delay of 20s at the end of the page. 
-%may indicate that they are ready to begin the game by clicking a ``Start'' button at the end of the page.
-%To prevent participants from skipping the instructions, this button appears with a delay of 20s.
 
 \begin{figure}
    \centering
@@ -297,7 +264,6 @@ The final page thanks users for their participation and provides a unique code t
 Further, participants may choose to visit a debriefing page with full information on study objectives and goals. 
 
 On average, participants needed 13m:43s ($\pm$ 00m:23s SEM) from accepting the HIT on AMT to inserting their unique payment code.
-%this code was stored in crypted format and deleted as soon as payment was done - this ensured anonymity
 
 \subsection{Statistical Analysis, Sample Size Calculation and Data Quality Measures}
 
@@ -318,11 +284,6 @@ We follow the same approach to compare age and gender distributions.
 We also compare user's explicit knowledge of plant relevance to the expected value given random response patterns using the non-parametric one-sample Wilcoxon signed rank test for each group separately, and report Bonferroni corrected results.
 To analyze group differences of ordinal data from the Likert-style items, we rely on the non-parametric Wilcoxon-Mann-Whitney \textit{U} test.
 We report effect sizes for all survey data comparisons as \textit{r}.
-
-%We performed an a priori sample size estimation based on data obtained from the third pilot. 
-%To do so, we set up two linear mixed effects models with pack size and reaction time as described above. 
-%For each of these models, we run a simulation-based power analysis for samples of 20--100 participants with fixed effects of group and trial number over 1000 simulations (mixedpower v.0.1.0)~\citep{kumle_estimating_2021}. 
-%Inspecting the results, we choose to acquire data from 100 participants to reach a power $>$ 80\% for at least one combination of trial number and group, while also accounting for potential participant attrition.
 
 As a web-based study, we run the risk that some participants attempt to game the system to collect the reward without providing proper answers. 
 Thus, we implement a number of data quality checks that were planned a priori.
@@ -430,8 +391,6 @@ Empirical evidence highlighting the close relation between perceived plausibilit
 In contrast, the computational plausibility constraint rejects \glspl{CFE} that are not part of the training set, even if they are minimal.
 Consequently, users in the \textit{plausible} condition encounter larger differences between provided explanations and their input, at odds with the idea of plausibility as comparative similarity.
 Conversely, users in the closest condition might have experienced their \glspl{CFE} as more psychologically plausible than the computationally plausible version.
-%Further, an emotional effect is conceivable: Upon seeing \textit{closest \glspl{CFE}}, users might get a feeling of ``just missing the better option'', inducing negative affect that strongly motivates the need for improvement~\citep{medvec_when_1997, markman_reflection_2003}.
-%Additionally, we may speculate that the larger discrepancies between factual and counterfactual state in the \textit{plausible} condition may increase the mental load on users, hampering learning.
 Further, upon seeing \textit{closest \glspl{CFE}}, users might get a feeling of ``just missing'', inducing negative affect that strongly motivates improvement~\citep{medvec_when_1997, markman_reflection_2003}.
 Additionally, the larger discrepancies between factual and counterfactual state in the \textit{plausible} condition might increase the mental load on users, potentially hampering learning.
 Future studies need to disentangle contributions of these factors.
@@ -514,7 +473,6 @@ Moreover, the current scenario in its present condition may be difficult to tran
 The lack of realism offers full algorithmic recourse~\citep{karimi_survey_2020}: all changes are feasible (\ie, doable for the participant), and all changes in features are independent (\ie, a user can change plant 1, and this will have no long-time effect on plant 2).
 In real life scenarios, this is barely the case (\eg, a bank customer might never be able to get younger to get a loan; yearly income also affects savings). 
 Thus, our example is much more artificial, and we suggest applying iterative learning designs in more realistic, real-world scenarios as an exciting avenue for future work.
-%Despite its "abstractness", a similar scenario could appear when users interact with a tutor system, where the aim is to learn new stuff - or in everyday situations like interacting with household assistants that integrate data from various sources, where humans do not really fathom how these sources interact (how about smart meters, controlling heating?) 
 
 %% What did ppl do that did not show high levels of learning?
 Users in our study play an elaborate online game, with a detailed user interface, and several consecutive scenes.
@@ -552,18 +510,3 @@ Moreover, our findings suggest that novice users benefit more from receiving \te
 This supports the view of plausibility as comparative similarity rather than probability in cases where users lack an accurate mental model to build on.
 In sum, our work emphasizes yet again that theoretical approaches proposing explanation techniques for \gls{ML} models and user-based validations thereof need to go hand in hand.
 Researchers designing \gls{XAI} approaches need to bear in mind human behavior, preferences and mental models, to build on a solid foundation to effectively benefit the end user.
-
-%\subsection{Out for now}
-%%% Out for now
-%\textcolor{ACMDarkBlue}{
-%Lage et al., 2019: CF evaluation is harder than mere simulation or verification tasks (i.e., users need significantly longer and were judged as being significantly harder to do than simple simulations)
-%} 
-%\textcolor{ACMDarkBlue}{
-%Check out: improved task performance are contingent on both system understanding and appropriate trust (CHEF REF: R.R. Hoffman, S.T. Mueller, G. Klein, J. Litman, Metrics for explainable AI: challenges and prospects, arXiv preprint arXiv:1812.04608.)
-%} 
-%\textcolor{ACMDarkBlue}{
-%NO ACCESS YET: Another cool design worth looking at: chatbot use! Chat-XAI: A New Chatbot to Explain Artificial Intelligence, 2021; \url{Gao, M., Liu, X., Xu, A., \& Akkiraju, R. (2021, September). Chat-XAI: A New Chatbot to Explain Artificial Intelligence. In Proceedings of SAI Intelligent Systems Conference (pp. 125-134). Springer, Cham.}
-%}  
-%\textcolor{ACMDarkBlue}{
-%From a psychological standpoint, it is important to note that definitions of CFs slightly diverge. Many computer science definitions consider a CF as valid only if it represents a ''minimal set of features to change'' (Ref?). In Psychology, however, any combination of changes leading to a different outcome can be considered a counterfactual (true, there are better and worse ones, but still...)
-%} 
