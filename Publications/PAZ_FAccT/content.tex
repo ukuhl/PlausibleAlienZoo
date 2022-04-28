@@ -113,7 +113,7 @@ In the current work, we follow an alternative approach when providing \textit{co
 
 The guiding question of the current work is whether \textit{computationally plausible \glspl{CFE}} have an advantage over \textit{closest \glspl{CFE}} in helping users to learn from an \gls{ML} model.
 To assess this question, we rely on an interactive iterative learning task, where users repeatedly choose input values for an \gls{ML} model.
-In a separate study, we successfully demonstrated the added benefit of providing closest \glspl{CFE} compared to no explanation given this experimental framework~\citep{IAZ ARXIV}.
+In a separate study, we successfully demonstrate the added benefit of providing closest \glspl{CFE} compared to no explanation given this experimental framework~\citep{IAZ ARXIV}.
 
 In the current work, users receive either \textit{computationally plausible} or \textit{closest \glspl{CFE}}, highlighting how changes in the user's previous input would have lead to better results.
 The main advantage of this approach is that the interplay between repeated user action and corrective feedback enables us to assess user understanding at each stage of the process objectively through task performance.
@@ -232,15 +232,16 @@ Note that our implementation prevents pack size from shrinking below 2.
 \subsection{Participants}
 
 The study ran in early November 2021 on \gls{AMT}.
-After performing three pilots with 10 users each to refine the experimental design, we recruited a total of 100 participants for final assessment, following an a priori sample size estimation~\citep{kumle_estimating_2021}.% Batch info neccesary? % report that users were excluded if the done it before?
+%After performing three pilots with 10 users each to refine the experimental design, we recruited a total of 100 
+After piloting, we recruited a total of 100 participants for final assessment, following an a priori sample size estimation~\citep{kumle_estimating_2021}.% Batch info neccesary? % report that users were excluded if the done it before?
 ~A first data quality check revealed corrupted data for four participants due to logging issues. 
 Thus, we acquired four additional data sets. 
 All participants gave informed electronic consent by providing clickwrap agreement prior to participation.
 All participants received a reward of US\$ 4 for participation. 
 The ten best performing users received an additional bonus of US\$ 2. 
 Game instructions informed participants about the possibility of a bonus to motivate compliance with the experimental task~\citep{bansal_updates_2019}.
-%The study was approved by the Ethics Committee of the University Bielefeld, Germany.
-The study was approved by the Ethics Committee of the author's home university.
+The study was approved by the Ethics Committee of the University Bielefeld, Germany.
+%The study was approved by the Ethics Committee of the author's home university.
 
 \subsection{Experimental Procedure}\label{subsec:experimental-procedure}
 
@@ -252,11 +253,12 @@ Unbeknownst to the user, they are randomly assigned to either the \textit{closes
 
 The succeeding page provides detailed instructions to the game. 
 Specifically, it shows images of the aliens, as well as the selection of plants they may choose to feed from.
-Written instructions detail that it is possible to choose up to six leaves per plant in whatever combination seems desirable, and that choosing healthy or unhealthy combinations lead to increases or decreases in pack size, respectively.
+Written instructions detail that it is possible to choose up to six leaves per plant in whatever combination seems desirable, and that choosing healthy or unhealthy combinations leads to increases or decreases in pack size, respectively.
 Further instructions emphasize the user's task to maximize the number of aliens, so-called shubs, with the best players qualifying for a monetary bonus.
 Participants are also informed that they will receive feedback on what choice would have led to a better result after two rounds of feeding.
-Users may indicate that they are ready to begin the game by clicking a ``Start'' button at the end of the page.
-To prevent participants from skipping the instructions, this button appears with a delay of 20s.
+Users begin the game by clicking a ``Start'' button, appearing with a delay of 20s at the end of the page. 
+%may indicate that they are ready to begin the game by clicking a ``Start'' button at the end of the page.
+%To prevent participants from skipping the instructions, this button appears with a delay of 20s.
 
 \begin{figure}
    \centering
@@ -332,7 +334,7 @@ To uphold a high threshold for data quality, we follow a conservative approach o
 
 \section{Results}\label{sec:results}
 
-From 100 participants recruited via \gls{AMT}, we exclude data from participants who qualified as speeders (\textit{n} = 2), failed both attention trials during the game (\textit{n} = 5), gave an incorrect response for the catch item in the survey (\textit{n} = 3), or straight-lined during the game (\textit{n} = 4) or in the survey (\textit{n} = 12), leaving data from 74 participants for final analysis (Table~\ref{tab:participants}).
+From the initial 100 participants, we exclude data from participants who qualified as speeders (\textit{n} = 2), failed both attention trials during the game (\textit{n} = 5), gave an incorrect response for the catch item in the survey (\textit{n} = 3), or straight-lined during the game (\textit{n} = 4) or in the survey (\textit{n} = 12), leaving data from 74 participants for final analysis (Table~\ref{tab:participants}).
 
 \begin{table}
   \caption{Demographic information of participants.}
@@ -362,7 +364,7 @@ Strikingly, the data suggests that participants in the \textit{closest}, not the
 This effect is confirmed by the significant interaction of factors \textit{trial number} and \textit{group} (\textit{F}(11,792) = 2.119, \textit{p} = .017, $\eta_{\text{p}}^{2}$ = 0.029) in the corresponding linear mixed effects model. The follow-up analysis reveals significant differences between groups in trial 11 (\textit{t}(472) = 4.040, \textit{p} = .012, \textit{d} = 0.693) and trial 12 (\textit{t}(472) = 2.530, \textit{p} \textless .001, \textit{d} = 1.101).
 Additionally, there is a highly significant main effect of trial number (\textit{F}(11,792) = 7.585, \textit{p} \textless .001, $\eta_{\text{p}}^{2}$ = 0.095), but no significant main effect of group (\textit{F}(11,72) = 2.586, \textit{p} = .112, $\eta_{\text{p}}^{2}$ = 0.035).
 
-Participants in both groups showed a marked decrease in decision time over the curse of the study, already apparent after the very first trial (Figure \ref{fig:hyp1}b).
+Participants in both groups showed a marked decrease in decision time over the curse of the study, already apparent after the first trial (Figure \ref{fig:hyp1}b).
 The significant main effect of factor \textit{trial number} (\textit{F}(11,792) = 14.818, \textit{p} \textless .001, $\eta_{\text{p}}^{2}$ = 0.171) confirms this observation.
 Corresponding post-hoc analyses show significant differences between trial 1 and all other trials (all \textit{t}(792) \textgreater 5.900, \textit{p} \textless .001, \textit{d} \textgreater 1.200), between trial 3 and 4 (\textit{t}(792) = 3.765, \textit{p} = .012, \textit{d} = 0.621), and between trials 4 and 5 (\textit{t}(792) = 3.395, \textit{p} = .048, \textit{d} = 0.560).
 Neither the main effect of factor \textit{group} (\textit{F}(11,72) = 0.235, \textit{p} = .630, $\eta_{\text{p}}^{2}$ = 0.003), nor the interaction between factors \textit{trial number} and \textit{group} (\textit{F}(11,792) = 0.897, \textit{p} = .543, $\eta_{\text{p}}^{2}$ = 0.012) reach significance.
@@ -385,7 +387,7 @@ Thus, we cannot verify our hypothesis that \textit{computationally plausible \gl
 
 \subsection{Do Computationally Plausible CFEs Increase User's Subjective Understanding?}
 To assess hypothesis 2, we analyze participant judgments on relevant survey items.
-Visual assessment suggests that there is very little variation in terms of user responses between groups (Figure \ref{fig:survey}a), confirmed by our statistical assessment. 
+Visual assessment suggests that there is little variation in terms of user responses between groups (Figure \ref{fig:survey}a), confirmed by our statistical assessment. 
 Groups do not statistically differ when judging whether presented \gls{CFE} feedback was helpful to increase pack size (\textit{closest} condition: \textit{M} = 3.700 $\pm$ 1.285 \textit{SE}; \textit{plausible} condition: \textit{M} = 3.636 $\pm$ 0.242 \textit{SE}; \textit{U} = 656, \textit{p} = .968, \textit{r} = .005).
 Likewise, we do not detect significant group differences in terms of subjective usability (\textit{closest} condition: \textit{M} = 3.775 $\pm$ 0.216 \textit{SE}; \textit{plausible} condition: \textit{M} = 3.606 $\pm$ 0.230 \textit{SE}; \textit{U} = 603, \textit{p} = .513, \textit{r} = .077).
 In addition, there is no significant difference between groups for estimated usefulness of explanations for others (\textit{closest} condition: \textit{M} = 3.750 $\pm$ 0.208 \textit{SE}; \textit{plausible} condition: \textit{M} = 3.647 $\pm$ 0.206 \textit{SE}; \textit{U} = 637, \textit{p} = .631, \textit{r} = .056).
