@@ -113,7 +113,9 @@ In the current work, we follow an alternative approach when providing \textit{co
 
 The guiding question of the current work is whether \textit{computationally plausible \glspl{CFE}} have an advantage over \textit{closest \glspl{CFE}} in helping users to learn from an \gls{ML} model.
 To assess this question, we rely on an interactive iterative learning task, where users repeatedly choose input values for an \gls{ML} model.
-At regular intervals, they receive either \textit{computationally plausible} or \textit{closest \glspl{CFE}}, highlighting how changes in the user's previous input would have lead to better results.
+In a separate study, we successfully demonstrated the added benefit of providing closest \glspl{CFE} compared to no explanation given this experimental framework~\citep{IAZ ARXIV}.
+
+In the current work, users receive either \textit{computationally plausible} or \textit{closest \glspl{CFE}}, highlighting how changes in the user's previous input would have lead to better results.
 The main advantage of this approach is that the interplay between repeated user action and corrective feedback enables us to assess user understanding at each stage of the process objectively through task performance.
 
 We find it conceivable that implementing a plausibility constraint indeed improves user performance. 
@@ -147,13 +149,15 @@ To assess \textit{Hypotheses 1--3}, we use a novel iterative learning design rev
 \begin{figure}
    \centering
    \includegraphics[width=\textwidth]{./media/FigureStudyStructure.pdf}
-   \caption{General overview of study procedure. (\textbf{a}) The plausible Alien Zoo game is an iterative design with blocks containing two trials calling for user input, and finishing with a feedback scene that provides either \textit{closest} or \textit{computational plausible \glspl{CFE}} computed on user's previous input. (\textbf{b}) After 6 blocks, users enter a post-game survey collecting self-report information from participants. Likert-scale items adapted from~\citep{holzinger_measuring_2020}. Catch item marked in light gray. The lower part of both subfigures shows measures evaluates from respective parts; $^\dag$ objective measure, $^\ddag$ subjective measure.}
+   \caption{General overview of study procedure. (\textbf{a}) The Alien Zoo game is an iterative design with blocks containing two trials calling for user input, and finishing with a feedback scene that provides either \textit{closest} or \textit{computational plausible \glspl{CFE}} computed on user's previous input. (\textbf{b}) After 6 blocks, users enter a post-game survey collecting self-report information from participants. Likert-scale items adapted from~\citep{holzinger_measuring_2020}. Catch item marked in light gray. The lower part of both subfigures shows measures evaluates from respective parts; $^\dag$ objective measure, $^\ddag$ subjective measure.}
    \label{fig:StudyStructure}
  \end{figure}
 
-\subsection{The Plausible Alien Zoo Scenario}
+\subsection{The Alien Zoo Scenario}
 
-We developed a game-like experimental design on a web-based interface to provide global access for users from diverse backgrounds, facilitating large-scale participant recruitment.
+We developed a game-like experimental design, the Alien Zoo framework~\citep{IAZ ARXIV}.
+It relies on a web-based interface to provide global access for users from diverse backgrounds, facilitating large-scale participant recruitment.
+For a detailed account of the framework's conception and the rationale behind the corresponding design choices, see~\citet{IAZ ARXIV}.
 
 %\textcolor{ACMDarkBlue}{
 %In the current study, be relied on the novel Alien Zoo paradigm (REF to arxiv paper).
@@ -214,10 +218,11 @@ Yet, it is powerful enough to model our synthetic data set sufficiently well.
 The current implementation uses the Gini splitting rule of CART~\citep{breiman_classification_1984}, with a maximum tree depth of $4$.
 The decision tree corresponding to the ground truth model is build once in the beginning and remains the same for all users during the study. 
 
-We use the code provided by the CEML package~\citep{artelt_ceml_2019} for computing \glspl{CFE}.
-%In the interest of reproducible research, all source code of the current study is made available. % taken out to ensure anonymity
+We use the code provided by the CEML package~\citep{artelt_ceml_2019} for computing \glspl{CFE}\footnote{\url{https://github.com/andreArtelt/ceml}}.
+In the interest of reproducible research, all source code of the current study is available.\footnote{\url{LINK}} 
+% taken out to ensure anonymity
 The underlying data set used for tree building consists of 5 integer features (\ie, the plants used for feeding) and 1 continuous output variable (\ie, the growth rate used as factor for computing the new pack size).
-We generated this data according to the following scheme: The growth rate scales linearly with plant 2, iff plant 4 has a value of 1 or 2 AND plant 5 is not smaller than 4. 
+We generated this data according to the following scheme: The growth rate scales linearly with plant 2, iff plant 4 has a value of 1 or 2 OR plant 5 is not smaller than 4. 
 Growth rate may take a value between 0 and 2, used as a factor for pack size in the previous round to compute the new pack size.
 The initial full data set contains all possible plant -- growth rate combinations $100$ times, yielding 3 276 800 data points. 
 For final model training, we sample a subset of 10 922 data points from this full set to introduce sparsity, thus ensuring that computed \textit{closest} and \textit{computationally plausible \gls{CFE}} diverge.
@@ -255,7 +260,7 @@ To prevent participants from skipping the instructions, this button appears with
 \begin{figure}
    \centering
    \includegraphics[width=\textwidth]{./media/FigureGameInterface.pdf}
-   \caption{Exemplary user journey through the first block of the plausible Alien Zoo game. Bold arrows indicate temporal succession of respective scenes. The figure highlights the iterative nature of the game with repeated user input and end-of-block presentation of \glspl{CFE}. Note that plant counters are set to 0 at the beginning of each padlock scene. The figure displays the state after the exemplary user inserted their current choice. For this manuscript, font size in images of scenes was increased to improve visibility.}
+   \caption{Exemplary user journey through the first block of the Alien Zoo game. Bold arrows indicate temporal succession of respective scenes. The figure highlights the iterative nature of the game with repeated user input and end-of-block presentation of \glspl{CFE}. Note that plant counters are set to 0 at the beginning of each padlock scene. The figure displays the state after the exemplary user inserted their current choice. For this manuscript, font size in images of scenes was increased to improve visibility.}
    \label{fig:StudyStructure2}
  \end{figure}
 
@@ -321,7 +326,7 @@ Thus, we implement a number of data quality checks that were planned a priori.
 We identify speeders based on the decision time, flagging users that spent less than 2s in the padlock scene in 4 or more trials.
 We flag participants that fail to respond with the correct number of aliens in both attention trials during the game.
 Furthermore, we included a catch item in the survey (\ref{fig:StudyStructure}b, item 7), flagging inattentive users.
-Finally, we identify straight-lining participants who keep choosing the same plant combination despite not improving in at least two blocks, or answer with only positive or negative valence in the survey.
+Finally, we identify straight-lining participants who keep choosing the same plant combination despite not improving in at least three blocks, or answer with only positive or negative valence in the survey.
 To uphold a high threshold for data quality, we follow a conservative approach of excluding participants that were flagged for at least one of these reasons.
 
 \section{Results}\label{sec:results}
@@ -469,7 +474,7 @@ A major challenge for effective user designs comparing different approaches is k
 User judgments of general understandability and presentation mode of \glspl{CFE} inspire confidence that we achieved this level of control with our Alien Zoo design. 
 In fact, the respective items elicit the highest user judgments out of all survey responses, with agreement values close to 90\%.% (questionnaire items 3, 4 + 10). So this is also control to make sure groups don’t differ in a weird way.
 ~High agreement across both groups leads us to conclude that mode of \gls{CFE} presentation does not have an impact when comparing users experience \textit{closest} vs. \textit{plausible} \glspl{CFE}, validating our hypothesis 3.
-Thus, the Alien Zoo design as proposed here is suitable for user evaluations of \gls{CFE} methods, a yet vastly understudied aspect in the field of \gls{XAI}~\citep{keane_if_2021}.
+Thus, the Alien Zoo design does not just elucidate benefits of providing \glspl{CFE} compared to no explanation~\citep{IAZ ARXIV}, it is also suitable for user evaluations of \gls{CFE} methods, a yet vastly understudied aspect in the field of \gls{XAI}~\citep{keane_if_2021}.
 
 %%%% Exploratory Analysis
 Finally, the majority of users indicate that they fail to find inconsistencies in the \glspl{CFE} provided.
