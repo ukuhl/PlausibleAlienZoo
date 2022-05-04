@@ -71,7 +71,7 @@ In their plausibility analysis model,~\citeauthor{connell_model_2006} expand on 
 Thus, while it is difficult to pinpoint exactly what makes a counterfactual psychologically plausible, we may recognize pivotal roles of concepts like comparative similarity and probability.
 Following the user-centered focus on explainability proposed by~\citeauthor{miller_explanation_2019}~\citep{miller_explanation_2019}, incorporating these concepts would be an important step towards automatic generation of plausible, and thus more human-friendly and usable, \gls{CFE}.
 
-\section{Computation of CFEs and Plausible CFEs}\label{sec:EffCompCFs}
+\section{Computation of Closest CFEs and Plausible CFEs}\label{sec:EffCompCFs}
 \citeauthor{wachter_counterfactual_2017} introduce a \gls{CFE} $\xcf\in\RN^\dimsym$ of an \gls{ML} model $\classifier:\RN^\dimsym\to\setY$ as an optimization problem~\citep{wachter_counterfactual_2017} :
 \begin{equation}\label{eq:counterfactual_opt_original}
 \underset{\xcf \,\in\, \RN^\dimsym}{\arg\min}\; \loss\big(\classifier(\xcf), \ycf\big) + C \cdot \regularization(\xcf, \x)
