@@ -4,7 +4,7 @@ output:
   pdf_document:
     toc: TRUE
     toc_depth: 5
-bibliography: PlausibleAlienZoo.bib
+bibliography: ../PlausibleAlienZoo.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -13,12 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r results='asis', echo=FALSE, include=FALSE,}
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE)
-#install.packages("rstudioapi")
-#install.packages("unikn")
-#install.packages("tidyverse")
-#install.packages("here")
-#install.packages("plyr")
-#install.packages("effsize")
 
 library(rstudioapi)
 library(ggplot2)
@@ -33,11 +27,6 @@ library(scales)
 library(effsize)
 
 # for the lme approach:
-#install.packages("emmeans") # estimated marginal means and p values
-#install.packages("sjstats") # partial eta squared and cohens f effect size
-#install.packages("lme4") # estimated the multi level model (random intercept for participants)
-#install.packages("lmerTest") # more comprehensive anova output with p values
-#install.packages("MuMIn") # R^2 for the model
 library("emmeans")
 library("sjstats")
 library("lme4")
@@ -105,173 +94,6 @@ With the final design from the third pilot, we were happy with the outcome: only
 
 With this data, let's estimate how many users we would need for a sufficiently powered study. We will focus on how many users are necessary for the linear mixed effects model analysis of ShubNo and Time (H1.1 and H1.2).
 
-<!-- ## Check covariates across groups -->
-
-<!-- Additionally to assessing performance, we also acquire age and gender information of participants. -->
-<!-- How do our groups look like? are they comparable? -->
-
-<!-- ```{r echo=FALSE, warning=FALSE,fig.height = 4, fig.width = 3.5} -->
-
-<!-- sourceLoc=here::set_here() -->
-<!-- setwd(dirname(sourceLoc)) -->
-
-<!-- # Where's the data -->
-<!-- demo_source = list.files(path = "../BackEnd/userData", pattern="demographics_PAZ_P3.csv",full.names=TRUE) -->
-
-<!-- # load to dframes -->
-<!-- df_demo=read.csv(demo_source,header=TRUE) -->
-<!-- # remove duplicate lines (buggy logging?) -->
-<!-- df_demo=df_demo[!duplicated(df_demo),] -->
-
-<!-- df_demo$group=as.factor(df_demo$group) -->
-<!-- df_demo$group=recode_factor(df_demo$group,"1"="C","0"="P") -->
-
-<!-- # drop fields 'X' -->
-<!-- # drop fields 'X' if present (was problem with simulated data) -->
-<!-- if("X" %in% colnames(df_demo)){ -->
-<!-- df_demo=subset(df_demo,select=-c(X)) -->
-<!-- } -->
-
-<!-- print(colnames(df_demo)) -->
-
-<!-- # get only age info -->
-<!-- df_demo_age = df_demo[df_demo$item=='age',] -->
-<!-- df_demo_gender = df_demo[df_demo$item=='gender',] -->
-
-<!-- # summarize to get overview values of frequencies and percentages -->
-<!-- df_demo_age_summary=dplyr::summarise(group_by(df_demo_age, group, item, responseNo), -->
-<!--           SumChecks=sum(checked), -->
-<!--           PercUsersChecked=100*(sum(checked)/length(unique(userId)))) -->
-
-<!-- # summarize to get overview values of frequencies and percentages -->
-<!-- df_demo_gender_summary=dplyr::summarise(group_by(df_demo_gender, group, item, responseNo), -->
-<!--           SumChecks=sum(checked), -->
-<!--           PercUsersChecked=100*(sum(checked)/length(unique(userId)))) -->
-
-<!-- # convert to factor for proper plotting: -->
-<!-- df_demo_age_summary$responseNo=as.factor(df_demo_age_summary$responseNo) -->
-<!-- df_demo_gender_summary$responseNo=as.factor(df_demo_gender_summary$responseNo) -->
-
-<!-- # AGE: display frequency as raw counts -->
-<!-- CovAge_FreqUserResponses = ggplot(data=df_demo_age_summary, aes(x=responseNo,fill = group)) +  -->
-<!--   geom_bar(aes(y = SumChecks),stat="identity",position = position_dodge(preserve = "single"))+ -->
-<!--   labs(title="Age of participants (freq. counts)",x="", y = "Frequency of answer")+ -->
-<!--   theme_bw(base_size = 10)+ -->
-<!--   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+ -->
-<!--   scale_x_discrete(breaks=1:7, labels=c("18-24y","25-34y","35-44y","45-54y","55-64y","65 and\nover","Prefer not\nto answer"))+ -->
-<!--   theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_text(angle = 60,hjust = 0.95)) -->
-
-<!-- # AGE: display frequency as percentage -->
-<!-- CovAge_PercUserResponses = ggplot(data=df_demo_age_summary, aes(x=responseNo,fill = group)) +  -->
-<!--   geom_bar(aes(y = PercUsersChecked),stat="identity",position = position_dodge(preserve = "single"))+ -->
-<!--   labs(title="Age of participants (% of users)",x="", y = "% of users")+ -->
-<!--   theme_bw(base_size = 10)+ -->
-<!--   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+ -->
-<!--   scale_x_discrete(breaks=1:7, labels=c("18-24y","25-34y","35-44y","45-54y","55-64y","65 and\nover","Prefer not\nto answer"))+ -->
-<!--   theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_text(angle = 60,hjust = 0.95)) -->
-
-<!-- # put plots together -->
-<!-- figure_CovAgeRaw <- ggarrange(CovAge_FreqUserResponses,CovAge_PercUserResponses, -->
-<!--                     ncol = 1, nrow = 2, align = "v") -->
-<!-- # save -->
-<!-- ggsave("../Figures/CovAgeRaw_distribution_PAZ_P3.pdf",width = 9, height = 7,) -->
-
-<!-- # show  -->
-<!-- figure_CovAgeRaw -->
-
-<!-- # GENDER: display frequency as raw counts -->
-<!-- CovGender_FreqUserResponses = ggplot(data=df_demo_gender_summary, aes(x=responseNo,fill = group)) +  -->
-<!--   geom_bar(aes(y = SumChecks),stat="identity",position = position_dodge(preserve = "single"))+ -->
-<!--   labs(title="Gender of participants (freq. counts)",x="", y = "Frequency of answer")+ -->
-<!--   theme_bw(base_size = 10)+ -->
-<!--   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+ -->
-<!--   scale_x_discrete(breaks=1:7, labels=c("Female","Male","Transgender\nfemale","Transgender\nmale","Non-binary/\n gender non-\nconforming","Not listed","Prefer not\nto answer"))+ -->
-<!--   theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_text(angle = 60,hjust = 0.95)) -->
-
-<!-- # GENDER: display frequency as percentage -->
-<!-- CovGender_PercUserResponses = ggplot(data=df_demo_gender_summary, aes(x=responseNo,fill = group)) +  -->
-<!--   geom_bar(aes(y = PercUsersChecked),stat="identity",position = position_dodge(preserve = "single"))+ -->
-<!--   labs(title="Gender of participants (% of users)",x="", y = "% of users")+ -->
-<!--   theme_bw(base_size = 10)+ -->
-<!--   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+ -->
-<!--   scale_x_discrete(breaks=1:7, labels=c("Female","Male","Transgender\nfemale","Transgender\nmale","Non-binary/\n gender non-\nconforming","Not listed","Prefer not\nto answer"))+ -->
-<!--   theme(plot.title = element_text(hjust = 0.5),axis.text.x = element_text(angle = 60,hjust = 0.95)) -->
-
-<!-- # put plots together  -->
-<!-- figure_CovGenderRaw <- ggarrange(CovGender_FreqUserResponses,CovGender_PercUserResponses, -->
-<!--                     ncol = 1, nrow = 2, align = "v") -->
-<!-- # save -->
-<!-- ggsave("../Figures/CovGenderRaw_distribution_PAZ_P3.pdf",width = 9, height = 7,) -->
-
-<!-- # show  -->
-<!-- figure_CovGenderRaw -->
-<!-- ``` -->
-
-<!-- Let's run a statistical comparison between our two groups. For age, we have ordinal data (in age bands), so we will use a non-parametric statistical test for ordinal data, that's the Wilcoxon–Mann–Whitney U test. -->
-
-<!-- For gender, we need to check if data is normally distributed. If so, use a ttest, if not, we will also use the non-parametric Wilcoxon–Mann–Whitney U. -->
-
-<!-- ```{r echo=FALSE, warning=FALSE} -->
-
-<!-- # statistical differences between groups? -->
-<!-- # count users who 'prefered not to answer' -->
-<!-- N_noAnswer_age=nrow(df_demo_age[df_demo_age$responseNo==7 & df_demo_age$checked==1,]) -->
-<!-- N_noAnswer_gender=nrow(df_demo_gender[df_demo_gender$responseNo==7 & df_demo_gender$checked==1,]) -->
-<!-- # remove 'prefer not to answer' entries -->
-<!-- df_demo_age = df_demo_age[!df_demo_age$responseNo==7,] -->
-<!-- df_demo_age_responses=df_demo_age[!df_demo_age$checked==0,] -->
-
-<!-- df_demo_gender = df_demo_gender[!df_demo_gender$responseNo==7,] -->
-<!-- df_demo_gender_responses=df_demo_gender[!df_demo_gender$checked==0,] -->
-
-<!-- # Age first:  -->
-
-<!-- # check sample sizes, make sure they deviate not too much: -->
-<!-- N_P_age=sum(df_demo_age_responses$group=='P') -->
-<!-- N_C_age=sum(df_demo_age_responses$group=='C') -->
-
-<!-- aget="Wilcox" -->
-<!-- agetest=uk_wilcox.test(df_demo_age_responses$responseNo[df_demo_age_responses$group=="P"],df_demo_age_responses$responseNo[df_demo_age_responses$group=="C"],paired=FALSE,exact=FALSE) -->
-<!-- ageeffsize=agetest$z_val/(sqrt(nrow(df_demo_age_responses))) -->
-
-<!-- matchingRes=paste(matchingRes,paste("\n","AgeRaw",sep=""),"",aget,agetest$p.value,ageeffsize,sep = ",") -->
-
-<!-- # Gender second:  -->
-
-<!-- # check sample sizes, make sure they deviate not too much: -->
-<!-- N_P_gender=sum(df_demo_gender_responses$group=='P') -->
-<!-- N_C_gender=sum(df_demo_gender_responses$group=='C') -->
-
-<!-- # check for significant differences - "irrelevant plans" judgements: -->
-<!-- # check if sample is normally distributed using shapiro test -->
-<!-- shapiro=shapiro.test(df_demo_gender_responses$responseNo) # if p-value is lower than 0.05, you can conclude that the sample deviates from normality -->
-<!-- if(shapiro$p.value > 0.05){ -->
-<!--   # if it's normal: t-test -->
-<!--   gent="TTest" -->
-<!--   gentest=t.test(df_demo_gender_responses$responseNo ~ df_demo_gender_responses$group,alternative="two.sided") -->
-<!--   geneffsize=cohen.d(df_demo_gender_responses$responseNo ~ df_demo_gender_responses$group) -->
-<!-- } else { -->
-<!--   gent="Wilcox" -->
-<!--   gentest=uk_wilcox.test(df_demo_gender_responses$responseNo[df_demo_gender_responses$group=="P"],df_demo_gender_responses$responseNo[df_demo_gender_responses$group=="C"],paired=FALSE,exact=FALSE) -->
-<!--   geneffsize=gentest$z_val/(sqrt(nrow(df_demo_gender_responses))) -->
-<!-- } -->
-
-<!-- matchingRes=paste(matchingRes,paste("\n","GenderRaw",sep=""),shapiro$p.value,gent,gentest$p.value,geneffsize,sep = ",") -->
-
-<!-- ``` -->
-
-<!-- The analysis showed for *Age*: -->
-
-<!-- * We have age information for `r N_P_age` users in the plausible and `r N_C_age` users in the closest group (`r N_noAnswer_age` user(s) preferred not to disclose age information). -->
-<!-- * Is there a significant difference in terms of age between the groups? We compared number of matches for users in plausible condition and users in the closest condition using a `r aget` test. This showed: U=`r agetest$statistic `, p=`r agetest$p.value `, r = `r ageeffsize ` -->
-
-<!-- The analysis showed for *Gender*: -->
-
-<!-- * We have age information for `r N_P_gender` users in the plausible and `r N_C_gender` users in the closest group (`r N_noAnswer_gender` user(s) preferred not to give gender information). -->
-<!-- * Is there a significant difference in terms of age between the groups? We compared number of matches for users in plausible condition and users in the closest condition using a `r gent` test. This showed -->
-<!--   + for ttest: t(`r gentest$parameter `)=`r gentest$statistic `, p=`r gentest$p.value `, cohen's d = `r geneffsize ` -->
-<!--   + for wilcoxon test: U=`r gentest$statistic `, p=`r gentest$p.value `, r = `r geneffsize ` -->
-
 ## Hypotheses
 
 The main hypothesis is the following:
@@ -280,9 +102,9 @@ The main hypothesis is the following:
 
 That means, we expect users in the plausible condition to 
 
-H1.1) perform better over time in terms of number of Shubs generated, *AND*
+* H1.1) perform better over time in terms of number of Shubs generated, *AND*
 
-H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
+* H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
 
 ## Descriptive stats
 
@@ -295,10 +117,10 @@ sourceLoc=here::set_here()
 setwd(dirname(sourceLoc))
 
 # Where's the data
-perf_source = list.files(path = "../../BackEnd/userData", pattern="performance_PAZ_P3.csv",full.names=TRUE)
-rt_source = list.files(path = "../../BackEnd/userData", pattern="reactionTime_PAZ_P3.csv",full.names=TRUE)
-survey_source = list.files(path = "../../BackEnd/userData", pattern="survey_PAZ_P3.csv",full.names=TRUE)
-attention_source = list.files(path = "../../BackEnd/userData", pattern="attentionCheck_PAZ_P3.csv",full.names=TRUE)
+perf_source = list.files(path = "../../UserData", pattern="performance_PAZ_Pilot3.csv",full.names=TRUE)
+rt_source = list.files(path = "../../UserData", pattern="reactionTime_PAZ_Pilot3.csv",full.names=TRUE)
+survey_source = list.files(path = "../../UserData", pattern="survey_PAZ_Pilot3.csv",full.names=TRUE)
+attention_source = list.files(path = "../../UserData", pattern="attentionCheck_PAZ_Pilot3.csv",full.names=TRUE)
 
 # load to dframes
 df_perf=read.csv(perf_source,header=TRUE)
@@ -442,7 +264,7 @@ This part will tag users that needed less than 2000ms to reach a feeding decisio
 # define min times for individual trial types (in ms)
 min_timeAgreementScene= 1 #1 # 1 second only? rationale: people agree really quickly, accept "speeding" here
 min_timeStartScene=20000 # 20000=20s is current delay before button appears
-min_timeStableUntilFeeding=2000 #2000ms = 2s ?
+min_timeStableUntilFeeding=2000 #2000ms = 2s
 min_timeFeedbackScene=10000 # 10000=10s is current delay before button appears
 
 # take a look: plot reaction times per participant, per trial type
@@ -637,9 +459,6 @@ straightlinersSurvey_IDs=as.character(straightlinersSurvey_IDs$userId)
 # look at survey responses of survey-straightliners:
 # df_survey[df_survey$userId %in% straightlinersSurvey_IDs & checked==1,]
 
-######## DELETE AGAIN IF WE WANT TO EXCLUDE STRAIGHTLINERS!
-#straightlinersSurvey_IDs=c()
-
 ```
 
 ### Remove data from problematic users
@@ -683,12 +502,6 @@ df_rt=subset(df_rt, ! userId %in% straightlinersGame_IDs_clean)
 df_survey=subset(df_survey, ! userId %in% straightlinersGame_IDs_clean)
 df_attention=subset(df_attention, ! userId %in% straightlinersGame_IDs_clean)
 #df_demo=subset(df_demo, ! userId %in% straightlinersGame_IDs_clean)
-# 
-# # # FROM SURVEY DATA ONLY: remove survey straightliners, that were not already recognized as speeders / attention failers
-# 
-# straightlinersSurvey_IDs_clean=straightlinersSurvey_IDs[!straightlinersSurvey_IDs %in% c(speeder_IDs,attentionFailBoth_IDs_clean,attentionFailSurvey_IDs_clean,straightlinersGame_IDs_clean) ]
-# 
-# df_survey=subset(df_survey, ! userId %in% straightlinersSurvey_IDs_clean)
 
 # remove survey straightliners, that were not already recognized as speeders / attention failers
 
@@ -729,16 +542,11 @@ Do we have an equal number of users in each clean dataframe? `r length(unique(us
 
 # Statistical assessment
 
-<!--
-THE CLASSICAL MUTLIVARIATE ANOVA APPROACH:
-[...] Comparisons of performance over time between users in the plausible and closest conditions, respectively, were performed using R–4.1.1 (https://www.r-project.org/) using a two-way mixed analyses of variance (ANOVA). Before running each analysis, user data was checked (*and corrected???*) for outliers, as well as for compliance with the ANOVA assumption of normality by visually inspecting the correlation between data and the normal distribution in normal QQ plots. In case of heteroscadicity, the Greenhouse-Geisser sphericity correction was applied to the data [@greenhouse1959methods]. Significant interactions or main effects were followed up in post-hoc analyses by running simple pairwise comparisons. The post-hoc analysis was corrected for multiple comparisons, and only adjusted p-values $p_{adj}$ are reported in this manuscript.
--->
-
 [...] Comparisons of performance over time between users in the plausible and closest conditions, respectively, are performed using R–4.1.1 [@r_core_team_r_2021]. Changes in performance over 12 trials as a measure of learning rate per group are modeled using the lme4 package v.4_1.1-27.1.
 
 In the model testing for differences in terms of user performance, the dependent variable is number of Shubs generated. In teh assessment of user's reaction time, we used time needed to reach a feeding decision in each trial as dependent variable.
 The final models include the fixed effects of group, trial number and their interaction. The random-effect structure includes a by-subjects random intercept. 
-Advantages of using this approach include that these models account for correlations of data drawn from the same participant [@detry_analyzing_2016], account for missing data, and better availability of post-hoc tests (according to here: https://www.theanalysisfactor.com/advantages-of-repeated-measures-anova-as-a-mixed-model/; find a more appropriate reference.)
+Advantages of using this approach include that these models account for correlations of data drawn from the same participant [@detry_analyzing_2016].
 <!--The code is inspired by this 2-part tutotial: https://www.youtube.com/watch?v=AWInLxpiZuA; https://www.youtube.com/watch?v=YsD8b5KYdMw -->
 
 Model fits are compared with the analysis of variance function of the stats package.
@@ -754,11 +562,11 @@ Recap the full hypothesis:
 
 That means, we expect users in the plausible condition to 
 
-H1.1) perform better over time in terms of number of Shubs generated, *AND*
+* H1.1) perform better over time in terms of number of Shubs generated, *AND*
 
-H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
+* H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
 
-H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
+* H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
 
 ### H1.1) Users in the plausible condition perform better over time in terms of number of Shubs generated
 
@@ -881,11 +689,9 @@ Now on to the statistics.
 
 ```{r echo=FALSE, fig.height = 7, fig.width = 7, fig.align = "center"}
 
-# setting up our LME model (as a 2x15 Anova, group by trial)
-
+# Setting up our LME model (as a 2x15 Anova, group by trial)
 # mixed design, with one within-subjects IV (trial) and one between subjects IV (group)
 # investigating the effect of both on Shubs generated.
-
 # Note that we add a random intercept for the participant by stating + (1|userId)
 # This makes it repeated measures, as we control for the random effect of 
 # one person doing something mutliple times.
