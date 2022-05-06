@@ -29,11 +29,6 @@ library(scales)
 library(effsize)
 
 # for the lme approach:
-#install.packages("emmeans") # estimated marginal means and p values
-#install.packages("sjstats") # partial eta squared and cohens f effect size
-#install.packages("lme4") # estimated the multi level model (random intercept for participants)
-#install.packages("lmerTest") # more comprehensive anova output with p values
-#install.packages("MuMIn") # R^2 for the model
 library("emmeans")
 library("sjstats")
 library("lme4")
@@ -103,11 +98,11 @@ sourceLoc=here::set_here()
 setwd(dirname(sourceLoc))
 
 # Where's the data
-demo_source = list.files(path = "../BackEnd/userData", pattern="demographics.csv",full.names=TRUE)
-perf_source = list.files(path = "../BackEnd/userData", pattern="performance.csv",full.names=TRUE)
-rt_source = list.files(path = "../BackEnd/userData", pattern="reactionTime.csv",full.names=TRUE)
-survey_source = list.files(path = "../BackEnd/userData", pattern="survey.csv",full.names=TRUE)
-attention_source = list.files(path = "../BackEnd/userData", pattern="attentionCheck.csv",full.names=TRUE)
+demo_source = list.files(path = "../UserData", pattern="demographics.csv",full.names=TRUE)
+perf_source = list.files(path = "../UserData", pattern="performance.csv",full.names=TRUE)
+rt_source = list.files(path = "../UserData", pattern="reactionTime.csv",full.names=TRUE)
+survey_source = list.files(path = "../UserData", pattern="survey.csv",full.names=TRUE)
+attention_source = list.files(path = "../UserData", pattern="attentionCheck.csv",full.names=TRUE)
 
 # load to dframes
 df_demo=read.csv(demo_source,header=TRUE)
@@ -162,7 +157,7 @@ df_survey$itemNo=df_survey$itemNo+1
 userNo_raw <- data.frame(table(c(unique(df_perf$userId), unique(df_rt$userId), unique(df_survey$userId), unique(df_attention$userId),c(unique(df_demo$userId)))))
 names(userNo_raw) <- c("Names", "Matches")
 
-## Still to do: remove participants how did not finish all parts (i.e., not being part of all DFs)
+## Now: remove participants how did not finish all parts (i.e., not being part of all DFs)
 df_perf=df_perf[!df_perf$userId %in% userNo_raw$Names[!userNo_raw$Matches==5],]
 df_rt=df_rt[!df_rt$userId %in% userNo_raw$Names[!userNo_raw$Matches==5],]
 df_survey=df_survey[!df_survey$userId %in% userNo_raw$Names[!userNo_raw$Matches==5],]
@@ -209,19 +204,7 @@ df_rt$group <- as.factor(df_rt$group)
 
 ```
 
-How many users do we have in our performance df before any cleaning (i.e., also including users with incomplete datasets)? `r length(userNo_raw$Names)`
-
-How many users do we have in our performance df after cleaning? `r length(unique(df_perf$userId))`
-
-How many users do we have in our reaction time df after cleaning? `r length(unique(df_rt$userId))`
-
-How many users do we have in our attention df after cleaning? `r length(unique(df_attention$userId))`
-
-How many users do we have in our survey df after cleaning? `r length(unique(df_survey$userId))`
-
-## General infos after removal of incomplete datasets
-
-At this point, we have `r length(unique(df_perf$userId))` participants. 
+Quick sanity check: after cleaning, we have `r length(unique(df_perf$userId))` participants.
 
 Why 101? We actually acquired 100, but one participant timed out on AMT. That means that he/she played the game and data was fully logged, BUT AMT did not accept their code anymore.
 Unfortunately, we cannot re-imburse this person for their efforts. Thus, we will exclude that person too.
@@ -239,11 +222,13 @@ df_demo=df_demo[!df_demo$userId %in% c("294e3"),]
 
 ```
 
-After removal, check again:
+## General infos after removal of incomplete datasets
 
-* At this point, we have `r length(unique(df_perf$userId))` participants. Of those, 
+How many users do we have in our performance df before any cleaning (i.e., also including users with incomplete datasets)? `r length(userNo_raw$Names)`
 
-* `r length(unique(df_perf$userId[df_perf$group=="C"]))` participants were in the closest condition and 
+After cleaning, we have `r length(unique(df_perf$userId))` participants. Of those, 
+
+* `r length(unique(df_perf$userId[df_perf$group=="C"]))` participants were in the control condition and 
 
 * `r length(unique(df_perf$userId[df_perf$group=="P"]))` participants in the plausible condition.
 
@@ -400,7 +385,6 @@ The analysis showed for *Gender*:
 * We have gender information for `r N_P_gender` users in the plausible and `r N_C_gender` users in the closest group (`r N_noAnswer_gender` user(s) preferred not to give gender information).
 * Is there a significant difference in terms of gender between the groups? We compared number of matches for users in plausible condition and users in the closest condition using a `r gent` test. This showed
 
-  <!-- + for ttest: t(`r gentest$parameter `)=`r gentest$statistic `, p=`r gentest$p.value `, cohen's d = `r geneffsize ` -->
   + for wilcoxon test: U=`r gentest$statistic `, p=`r gentest$p.value `, r = `r geneffsize `
 
 ## Quality criteria
@@ -415,10 +399,10 @@ Aim: identify IDs being faster than specified values (variable per game part).
 This part will tag users that needed less than 2000ms to reach a feeding decision (suspiciously quick) in 4 or more trials.
 
 
-```{r echo=FALSE,, fig.height = 7, fig.width = 7, fig.align = "center",fig.height = 4, fig.width = 6}
+```{r echo=FALSE, fig.align = "center", fig.height = 4, fig.width = 7}
 
 # define min times for individual trial types (in ms)
-min_timeAgreementScene= 1 # 1000 #1 # 1 second only? rationale: people agree really quickly, accept "speeding" here
+min_timeAgreementScene= 1 # 1 second only? rationale: people agree really quickly, accept "speeding" here
 min_timeStartScene=20000 # 20000=20s is current delay before button appears
 min_timeStableUntilFeeding=2000 #2000ms = 2s ?
 min_timeFeedbackScene=10000 # 10000=10s is current delay before button appears
@@ -581,8 +565,8 @@ straightlineGame_data=merge(merge(merge(merge(merge(
 straightlineGame_data=straightlineGame_data[(!straightlineGame_data$mismatchP1) & (!straightlineGame_data$mismatchP2) & (!straightlineGame_data$mismatchP3) & (!straightlineGame_data$mismatchP4) & (!straightlineGame_data$mismatchP5) & (!straightlineGame_data$mismatchShubNoNew), ]
 
 # count occurences of userIDs
-straightlinersGame_IDs=as.data.frame(straightlineGame_data %>% count(userId))
-# keep only IDs of users straight-lining in at least 2 blocks
+straightlinersGame_IDs=straightlineGame_data %>% count(userId)   
+# keep only IDs of users straight-lining in at least 3 blocks (i.e. half the blocks)
 straightlinersGame_IDs=straightlinersGame_IDs[(straightlinersGame_IDs$n > 2), ]
 straightlinersGame_IDs=as.character(straightlinersGame_IDs$userId)
 
@@ -607,8 +591,6 @@ straightlineSurvey_data=dt_survey[ checked == 1 & itemNo > 2 & !itemNo==7]
 straightlineSurvey_data$valence=ifelse(straightlineSurvey_data$responseNo>3,"pos","neg")
 straightlineSurvey_data$valence[straightlineSurvey_data$responseNo==3 | straightlineSurvey_data$responseNo==6]="neut"
 
-# identify users that answered with only 1 response type throughout all questions (very conservative)
-# straightlinersSurvey_IDs=straightlineSurvey_data[,list(mismatchSurveyItems=length(unique(responseNo))>1),keyby=.(userId)]
 # identify users that answered only using positive / negative / neutral valence
 straightlinersSurvey_IDs=straightlineSurvey_data[,list(mismatchValenceSurveyItems=length(unique(valence))>1),keyby=.(userId)]
 # keep only users without "mismatchSurveyItems" (no mismatch = uniform answers)
@@ -674,7 +656,7 @@ df_demo=subset(df_demo, ! userId %in% straightlinersSurvey_IDs_clean)
 # repeat sanity check: Number of users in each df the same?
 # make df with user numbers: user ID 'XXXX' appears in how many dfs?
 # the value of 4 would be desireable: all IDs represented in all 4 dfs
- userNo_clean <- data.frame(table(c(as.character(unique(df_perf$userId)), as.character(unique(df_rt$userId)), as.character(unique(df_survey$userId)), as.character(unique(df_attention$userId)))))
+userNo_clean <- data.frame(table(c(as.character(unique(df_perf$userId)), as.character(unique(df_rt$userId)), as.character(unique(df_survey$userId)), as.character(unique(df_attention$userId)))))
 names(userNo_clean) <- c("Names", "Matches")
 
 ```
@@ -706,6 +688,8 @@ medianAge_C=cumsum(df_demo_age_summary$SumChecks[df_demo_age_summary$group=="C"]
 medianAge_P=cumsum(df_demo_age_summary$SumChecks[df_demo_age_summary$group=="P"])
 
 ```
+
+### Final, clean dataset
 
 To sum up, in our final data we have `r length(unique(df_perf$userId))` users, with `r length(unique(df_perf$userId[df_perf$group=="C"]))` users in the control group (`r length(unique(df_demo$userId[df_demo$group=="C" & df_demo$item=="gender" & df_demo$checked==1 & df_demo$responseNo==1]))` female, `r length(unique(df_demo$userId[df_demo$group=="C" & df_demo$item=="gender" & df_demo$checked==1 & df_demo$responseNo==2]))` male, median age group is 25-34years), and 
 `r length(unique(df_perf$userId[df_perf$group=="P"]))` users in the plausible group (`r length(unique(df_demo$userId[df_demo$group=="P" & df_demo$item=="gender" & df_demo$checked==1 & df_demo$responseNo==1]))` female, `r length(unique(df_demo$userId[df_demo$group=="P" & df_demo$item=="gender" & df_demo$checked==1 & df_demo$responseNo==2]))` male, `r length(unique(df_demo$userId[df_demo$group=="P" & df_demo$item=="gender" & df_demo$checked==1 & df_demo$responseNo==5]))` non-binary / gender non-conforming, median age group is 35-44years).
@@ -774,15 +758,8 @@ The analysis showed for *Gender* in the clean dataset:
 * We have gender information for `r N_P_gender` users in the plausible and `r N_C_gender` users in the closest group (`r N_noAnswer_gender` user(s) preferred not to give gender information).
 * Is there a significant difference in terms of gender between the groups? We compared number of matches for users in plausible condition and users in the closest condition using a `r gent` test. This showed
 
-  <!-- + for ttest: t(`r gentest$parameter `)=`r gentest$statistic `, p=`r gentest$p.value `, cohen's d = `r geneffsize ` -->
   + for wilcoxon test: U=`r gentest$statistic `, p=`r gentest$p.value `, r = `r geneffsize `
   
-  
-  
-  
-
-
-
 ## Hypotheses
 
 The main hypothesis is the following:
@@ -791,19 +768,19 @@ The main hypothesis is the following:
 
 That means, we expect users in the plausible condition to 
 
-H1.1) perform better over time in terms of number of Shubs generated, *AND*
+* H1.1) perform better over time in terms of number of Shubs generated, *AND*
 
-H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
+* H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
 
-H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
+* H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
 
 Further, we expect:
 
 *H2) Users will differ in terms of their subjective understanding*, specifically:
 
-H2.1) Users will differ in how far they found the explanations useful, and in how far they could made use of it, with an advantage of plausible CFEs (questionnaire items 5, 6)
+* H2.1) Users will differ in how far they found the explanations useful, and in how far they could made use of it, with an advantage of plausible CFEs (questionnaire items 5, 6)
 
-H2.2) Users imagine plausible CFEs to be more helpful for others users, too (questionnaire item 9).
+* H2.2) Users imagine plausible CFEs to be more helpful for others users, too (questionnaire item 9).
 
 However:
 
@@ -817,16 +794,11 @@ Finally, we *do not formulate a prediction whether users will uncover inconsiste
 
 # Statistical assessment
 
-<!--
-THE CLASSICAL MUTLIVARIATE ANOVA APPROACH:
-[...] Comparisons of performance over time between users in the plausible and closest conditions, respectively, were performed using R–4.1.1 (https://www.r-project.org/) using a two-way mixed analyses of variance (ANOVA). Before running each analysis, user data was checked (*and corrected???*) for outliers, as well as for compliance with the ANOVA assumption of normality by visually inspecting the correlation between data and the normal distribution in normal QQ plots. In case of heteroscadicity, the Greenhouse-Geisser sphericity correction was applied to the data [@greenhouse1959methods]. Significant interactions or main effects were followed up in post-hoc analyses by running simple pairwise comparisons. The post-hoc analysis was corrected for multiple comparisons, and only adjusted p-values $p_{adj}$ are reported in this manuscript.
--->
-
 [...] Comparisons of performance over time between users in the plausible and closest conditions, respectively, are performed using R–4.1.1 [@r_core_team_r_2021]. Changes in performance over 12 trials as a measure of learning rate per group are modeled using the lme4 package v.4_1.1-27.1.
 
 In the model testing for differences in terms of user performance, the dependent variable is number of Shubs generated. In teh assessment of user's reaction time, we used time needed to reach a feeding decision in each trial as dependent variable.
 The final models include the fixed effects of group, trial number and their interaction. The random-effect structure includes a by-subjects random intercept. 
-Advantages of using this approach include that these models account for correlations of data drawn from the same participant [@detry_analyzing_2016], account for missing data, and better availability of post-hoc tests (according to here: https://www.theanalysisfactor.com/advantages-of-repeated-measures-anova-as-a-mixed-model/; find a more appropriate reference.)
+Advantages of using this approach include that these models account for correlations of data drawn from the same participant [@detry_analyzing_2016].
 <!--The code is inspired by this 2-part tutotial: https://www.youtube.com/watch?v=AWInLxpiZuA; https://www.youtube.com/watch?v=YsD8b5KYdMw -->
 
 Model fits are compared with the analysis of variance function of the stats package.
@@ -842,11 +814,11 @@ Recap the full hypothesis:
 
 That means, we expect users in the plausible condition to 
 
-H1.1) perform better over time in terms of number of Shubs generated, *AND*
+* H1.1) perform better over time in terms of number of Shubs generated, *AND*
 
-H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
+* H1.2) will become quicker in the final blocks, because choosing the right plants will become more automatic, *AND*
 
-H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
+* H1.3) can more clearly state which plants were crucial for the Shubs to prosper (questionnaire items 1 and 2)
 
 ### H1.1) Users in the plausible condition perform better over time in terms of number of Shubs generated
 
@@ -955,9 +927,9 @@ H1.1_figure1_ShubData_summary <- ggarrange(H1.1_p_ShubsPerTrial_summary,H1.1_p_S
 ggsave("Figures/H1.1_figure1_ShubData_summary_PAZ_FINAL.pdf",width = 5, height = 4,)
 
 # show
-print("Display figures showing development of pack size over trials / blocks:")
-#H1.1_figure1_ShubData
-H1.1_figure1_ShubData_summary
+# print("Display figures showing development of pack size over trials / blocks:")
+# #H1.1_figure1_ShubData
+# H1.1_figure1_ShubData_summary
 
 # last, make trialno a factor and show again a summary of data
 df_perf$trialNo = as.factor(df_perf$trialNo)
@@ -969,18 +941,13 @@ Now on to the statistics.
 
 ```{r echo=FALSE, fig.height = 4, fig.width = 7, fig.align = "center"}
 
-# setting up our LME model (as a 2x15 Anova, group by trial)
-
+# Setting up our LME model (as a 2x15 Anova, group by trial)
 # mixed design, with one within-subjects IV (trial) and one between subjects IV (group)
 # investigating the effect of both on Shubs generated.
-
 # Note that we add a random intercept for the participant by stating + (1|userId)
 # This makes it repeated measures, as we control for the random effect of 
 # one person doing something mutliple times.
 ShubNo_effect= lmer(shubNoNew ~ trialNo*group + (1|userId), data = df_perf) # linear model DV ShubNoNew predicted by the IV (trials, i.e. time)
-
-# NOTE NOTE NOTE! IF ESTIMATEABLE WITH FULL DATA, ALSO INCLUDE A RANDOM SLOPE FOLLOWING BARR et. al.:
-# ShubNo_effect= lmer(shubNoNew ~ group*trialNo + (1+trialNo|userId), data = df_perf)
 
 ShubNo_effect_anova=anova(ShubNo_effect)  # show model as anova
 names(ShubNo_effect_anova)=c("SumSq","MeanSq","NumDF","DenDF","Fvalue","Pvalue") # rename fields for easy access
@@ -1081,10 +1048,8 @@ print(tapply(df_rt$timeStableUntilFeeding, df_rt$group, summary))
 H1.2_p_RTPerTrial <- ggplot(df_rt, aes(x=as.factor(TrialNr), y=timeStableUntilFeeding, group = userId, color= group))+ 
   geom_point(alpha = 0.5)+
   geom_line()+
-  #facet_wrap(vars(group),nrow = 2, ncol = 1)+
   labs(title="Mean time needed to reach\nfeeding decision by group over trials",x="Trial", y = "Reaction time (ms)")+
   theme_bw(base_size = 10)+
-  #scale_y_continuous(limits = c(0, 100))+
   scale_x_discrete(breaks=1:numTrials)+
   scale_colour_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
   theme(legend.position="bottom")
@@ -1097,10 +1062,8 @@ H1.2_p_RTPerTrial_summary <- ggplot(df_RTPerTrial_summary, aes(x=as.factor(Trial
   geom_point(alpha = 0.5)+
   geom_line()+
   geom_ribbon(aes(ymin=mean/1000-sem/1000, ymax=mean/1000+sem/1000,fill=group), linetype=2, alpha=0.1)+
-  #facet_wrap(vars(group),nrow = 2, ncol = 1)+
   labs(title="Mean time for feeding decision by group over trials",x="Trial", y = " Mean time (s)")+
   theme_bw(base_size = 10)+
-  #scale_y_continuous(limits = c(0, 100))+
   scale_x_discrete(breaks=1:numTrials)+
   scale_colour_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
@@ -1116,10 +1079,8 @@ H1.2_p_RTPerBlock <- ggplot(df_rt_blockStats, aes(x=as.factor(BlockNr), y=timeSt
   geom_point(alpha = 0.5)+
   geom_line()+
   geom_ribbon(aes(ymin=timeStableUntilFeeding[,"mean"]-timeStableUntilFeeding[,"sem"], ymax=timeStableUntilFeeding[,"mean"]+timeStableUntilFeeding[,"sem"],fill=group), linetype=2, alpha=0.1)+
-  #facet_wrap(vars(group),nrow = 2, ncol = 1)+
   labs(title="Mean time needed to reach\nfeeding decision by group over blocks",x="Block", y = "Reaction time (ms)")+
   theme_bw(base_size = 10)+
-  #scale_y_continuous(limits = c(0, 100))+
   scale_x_discrete(breaks=1:max(df_perf$blockNo))+
   scale_colour_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
@@ -1129,10 +1090,8 @@ H1.2_p_RTPerBlock_summary <- ggplot(df_RTPerBlock_summary, aes(x=as.factor(Block
   geom_point(alpha = 0.5)+
   geom_line()+
   geom_ribbon(aes(ymin=mean-sem, ymax=mean+sem,fill=group), linetype=2, alpha=0.1)+
-  #facet_wrap(vars(group),nrow = 2, ncol = 1)+
   labs(title="Mean time needed to reach\nfeeding decision by group over blocks",x="Block", y = " Mean time (s)")+
   theme_bw(base_size = 10)+
-  #scale_y_continuous(limits = c(0, 100))+
   scale_x_discrete(breaks=1:numTrials)+
   scale_colour_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
   scale_fill_manual("Group", values=c(Ccol,Pcol), labels = c("Closest", "Plausible"))+
@@ -1168,11 +1127,9 @@ Now on to the statistics.
 
 ```{r echo=FALSE}
 
-# setting up our LME model (as a 2x15 Anova, group by trial)
-
+# Setting up our LME model (as a 2x15 Anova, group by trial)
 # mixed design, with one within-subjects IV (trial) and one between subjects IV (group)
 # investigating the effect of reaction times.
-
 # Note that we add a random intercept for the participant by stating + (1|userId)
 # This makes it repeated measures, as we control for the random effect of 
 # one person doing something multiple times.
@@ -1273,10 +1230,9 @@ So what did users tick?
 
 # ADAPT depending on data used: Vector specifying which features are relevant
 # [LAST ENTRY ALWAYS 0, to account for 'don't know' response option in survey]
-# current (random) setting: plant 2 and plant 5 were important
-# we used the third simulated dataset with
-# - a linear relationship between plant 2 and the growth rate, iff
-#  + plant 4 has a value of 1 or 2 AND
+# current setting: plants 2, and plants 4 or 5 were relevant:
+# there was a linear relationship between plant 2 and the growth rate, iff
+#  + plant 4 has a value of 1 or 2 OR
 #  + plant 5 is not smaller than 4
 
 relevantPlants_truth=c(2,4,5)
@@ -1340,7 +1296,7 @@ H1.3_figure1_UserResponses
 
 How to evaluate this statistically? Let's just count the matches between 'judged as relevant' / 'judged as irrelevant' user vectors and the true 'relevant' / 'irrelevant' factors.
 
-```{r echo=FALSE, fig.height = 3, fig.width = 5, fig.align = "center"}
+```{r echo=FALSE, fig.height = 5, fig.width = 5, fig.align = "center"}
 
 # define vectors with ground truth
 relevantPlants_truth_vec=c(0,0,0,0,0)
@@ -1448,15 +1404,13 @@ The analysis revealed:
 
 * Is there a significant difference in terms of matches between plants judged as relevant and ground truth?: We compared number of matches for users in plausible condition (M = `r df_survey_relevantPlants_summary$mean[df_survey_relevantPlants_summary$group=="P"]`, SEM = `r df_survey_relevantPlants_summary$sem[df_survey_relevantPlants_summary$group=="P"]`) and users in the closest condition (M = `r df_survey_relevantPlants_summary$mean[df_survey_relevantPlants_summary$group=="C"]`, SEM = `r df_survey_relevantPlants_summary$sem[df_survey_relevantPlants_summary$group=="C"]`) using a `r item1t` test. This showed
 
-  <!-- + for ttest: t(`r item1test$parameter `)=`r item1test$statistic `, p=`r item1test$p.value `, cohen's d = `r item1effsize ` -->
   + for wilcoxon test: U=`r item1test$statistic `, p=`r item1test$p.value `, r = `r item1effsize `
 
 * Is there a significant difference in terms of matches between plants judged as irrelevant and ground truth?: We compared number of matches for users in plausible condition (M = `r df_survey_irrelevantPlants_summary$mean[df_survey_irrelevantPlants_summary$group=="P"]`, SEM = `r df_survey_irrelevantPlants_summary$sem[df_survey_irrelevantPlants_summary$group=="P"]`) and users in the closest condition (M = `r df_survey_irrelevantPlants_summary$mean[df_survey_irrelevantPlants_summary$group=="C"]`, SEM = `r df_survey_irrelevantPlants_summary$sem[df_survey_irrelevantPlants_summary$group=="C"]`) using a `r item2t` test. This showed
 
-  <!-- + for ttest: t(`r item2test$parameter `)=`r item2test$statistic `, p=`r item2test$p.value `, cohen's d = `r item2effsize ` -->
   + for wilcoxon test: U=`r item2test$statistic `, p=`r item2test$p.value `, r = `r item2effsize `
 
-*Add on:* Did number of matches differ significantly from expected random?
+## Add on: Did number of matches differ significantly from expected random?
 
 ```{r echo=FALSE, fig.height = 3, fig.width = 5, fig.align = "center"}
 
@@ -1500,6 +1454,8 @@ This post-hoc analysis revealed:
 * irrelevant plants, plausible group: one-sample Wilcoxon signed rank test, W = `r wos3_test$statistic`, p = `r wos3_test$p.value*4` (bonf corrected), r = `r wos3_effsize`
 
 * irrelevant plants, closest group: one-sample Wilcoxon signed rank test, W = `r wos4_test$statistic`, p = `r wos4_test$p.value*4` (bonf corrected), r = `r wos4_effsize`
+
+## H1) Final plot for publication
 
 ```{r echo=FALSE, fig.height = 3, fig.width = 5, fig.align = "center"}
 # put all three H1 figures to one for publication
@@ -1546,9 +1502,9 @@ Recap the full hypothesis:
 
 H2) Users will differ in terms of their subjective understanding, specifically:
 
-H2.1) Users will differ in how far they found the explanations useful, and in how far they could make use of it, with an advantage of plausible CFEs (questionnaire items 5, 6)
+* H2.1) Users will differ in how far they found the explanations useful, and in how far they could make use of it, with an advantage of plausible CFEs (questionnaire items 5, 6)
 
-H2.2) Users imagine plausible CFEs to be more helpful for others users, too (questionnaire item 9).
+* H2.2) Users imagine plausible CFEs to be more helpful for others users, too (questionnaire item 9).
 
 ### H2.1) Users will differ in how far they found the explanations useful, and in how far they could made use of it, with an advantage of plausible CFEs (questionnaire items 5, 6)
 
@@ -1723,7 +1679,6 @@ matchingRes=paste(matchingRes,paste("\n","H2.1_UserJudgementsUsability",sep=""),
 
 ```
 
-
 The analysis revealed:
 
 * Is there a significant difference in terms of subjective helpfulness between groups? We compared responses for subjective helpfulness for users in plausible condition (M = `r df_survey_subjHelpfulness_summary$mean[df_survey_subjHelpfulness_summary$group=="P"]`, SEM = `r df_survey_subjHelpfulness_summary$sem[df_survey_subjHelpfulness_summary$group=="P"]`) and users in the closest condition (M = `r df_survey_subjHelpfulness_summary$mean[df_survey_subjHelpfulness_summary$group=="C"]`, SEM = `r df_survey_subjHelpfulness_summary$sem[df_survey_subjHelpfulness_summary$group=="C"]`) using a Wilcoxon–Mann–Whitney U test. This showed: U=`r item5test$statistic `, p=`r item5test$p.value `, r = `r item5effsize `
@@ -1883,6 +1838,8 @@ matchingRes=paste(matchingRes,paste("\n","H2.1_UserJudgementsHelpfulness",sep=""
 The analysis revealed:
 
 * Is there a significant difference in terms of estimated usefulness for others between groups? We compared number of matches for users in plausible condition (M = `r df_survey_UsabilityForOthers_summary$mean[df_survey_UsabilityForOthers_summary$group=="P"]`, SEM = `r df_survey_UsabilityForOthers_summary$sem[df_survey_UsabilityForOthers_summary$group=="P"]`) and users in the closest condition (M = `r df_survey_UsabilityForOthers_summary$mean[df_survey_UsabilityForOthers_summary$group=="C"]`, SEM = `r df_survey_UsabilityForOthers_summary$sem[df_survey_UsabilityForOthers_summary$group=="C"]`) using a Wilcoxon–Mann–Whitney U test. This showed: U=`r item9test$statistic `, p=`r item9test$p.value `, r = `r item9effsize `
+
+## H2) Final plot for publication
 
 ```{r echo=FALSE, fig.height = 2, fig.width = 5, fig.align = "center"}
 # make a H2 plot for publication
@@ -2076,10 +2033,10 @@ theme(legend.position = "bottom",legend.title=element_blank(),legend.background 
 # save
 ggsave("Figures/H3_figure2_UserResponses_stackedBar_PAZ_FINAL.pdf",width = 6, height = 4,)
 
-# show plot
-print("Mean user response for understanding / need for support to understand:")
-H3_figure2_UserResponses_violin
-H3_figure2_UserResponses_stackedBar
+## show plot
+#print("Mean user response for understanding / need for support to understand:")
+#H3_figure2_UserResponses_violin
+#H3_figure2_UserResponses_stackedBar
 
 # run stats, helpfulness judgements:
 item3t="Wilcox"
@@ -2241,10 +2198,10 @@ theme(legend.position = "bottom",legend.title=element_blank(),legend.background 
 # save
 ggsave("Figures/H4_figure2_UserResponses_stackedBar_PAZ_FINAL.pdf",width = 6, height = 2,)
 
-# show plot
-print("Mean user response for subjective helpfulness / usability:")
-H4_figure2_UserResponses_violin
-H4_figure2_UserResponses_stackedBar
+## show plot
+#print("Mean user response for subjective helpfulness / usability:")
+#H4_figure2_UserResponses_violin
+#H4_figure2_UserResponses_stackedBar
 
 # run stats, helpfulness judgements:
 item10t="Wilcox"
@@ -2449,6 +2406,7 @@ The analysis revealed:
 
 * Is there a significant difference in terms of estimated usefulness for others between groups? We compared number of matches for users in plausible condition (M = `r df_survey_Inconsist_summary$mean[df_survey_Inconsist_summary$group=="P"]`, SEM = `r df_survey_Inconsist_summary$sem[df_survey_Inconsist_summary$group=="P"]`) and users in the closest condition (M = `r df_survey_Inconsist_summary$mean[df_survey_Inconsist_summary$group=="C"]`, SEM = `r df_survey_Inconsist_summary$sem[df_survey_Inconsist_summary$group=="C"]`) using a Wilcoxon–Mann–Whitney U test. This showed: U=`r item8test$statistic `, p=`r item8test$p.value `, r = `r item8effsize `
 
+## Survey data: Final plot for publication
 
 ```{r echo=FALSE, fig.height = 2, fig.width = 5, fig.align = "center"}
 #make a final big figure of survey data for publication
