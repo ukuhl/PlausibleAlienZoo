@@ -11,13 +11,10 @@ class StartScene extends Phaser.Scene {
 	init() {}
 
 	preload() {
-		this.load.image('stable', 'static/stable.png');
 
 		this.load.spritesheet('shub', 'static/shub_spritesheet.png', { frameWidth: 50, frameHeight: 47 });
 
-		// load button images
-		this.load.image('buttonUp', 'static/buttonUp.png');
-		this.load.image('buttonDown', 'static/buttonDown.png');
+		// load button image
 		this.load.image('buttonFeed', 'static/buttonSubmit.png');
 
 		//load plant images
