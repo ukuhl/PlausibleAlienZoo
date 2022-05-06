@@ -3,7 +3,7 @@ import numpy as np
 import sklearn
 
 # Fit model
-def build_model(file_path="modelsStuff/AlienZooDataSet3.csv"):
+def build_model(file_path="modelData/AlienZooDataSet_PAZ.csv"):
     import pandas as pd
     import random
     random.seed(42)
@@ -140,7 +140,7 @@ def score_adjustments(x_orig, x_orig_path, leafs_path, dist):
 
         r.append((cost, y, adjustment))
 
-    r.sort(key=lambda item: item[0])        
+    r.sort(key=lambda item: item[0])
 
     return r
 
@@ -164,7 +164,7 @@ def compute_counterfactual_of_model(model, x, y_pred, plausible=False, X_train=N
     else:
         # Enumerate all leafs
         leafs = get_leafs_from_tree(model.tree_, classifier=False)
-        
+
         # Filter leafs for better predictions
         leafs = list(filter(lambda z: z[-1][2] > y_pred, leafs))
 
