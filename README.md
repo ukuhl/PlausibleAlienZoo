@@ -1,7 +1,7 @@
 # README
 
 This repository provides code, data, and analysis scripts for the Alien Zoo framework as used in the study:
-["Keep Your Friends Close and Your Counterfactuals Closer: Improved Learning From Closest Rather Than Plausible Counterfactual Explanations in an Abstract Setting"](Publication/XXX.pdf)
+["Keep Your Friends Close and Your Counterfactuals Closer: Improved Learning From Closest Rather Than Plausible Counterfactual Explanations in an Abstract Setting"](Publication/PAZ_arXiv_ukuhl)
 
 Detailed motivation and rationale are explained in the paper. In short, we provide this framework as a utility to run user studies to perform human level evaluations of counterfactual explanations (CFEs) for machine learning (ML).
 The presented study investigates whether there is a beneficial effect of adding a plausibility constraint when computing CFEs in the Alien Zoo setting.
